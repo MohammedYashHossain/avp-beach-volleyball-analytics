@@ -34,7 +34,7 @@ function Dashboard() {
 
   if (loading) {
     return (
-      <div className="section">
+      <div className="presentation-slide">
         <h2>Live Analytics Dashboard</h2>
         <div className="loading">Loading comprehensive volleyball statistics...</div>
       </div>
@@ -43,7 +43,7 @@ function Dashboard() {
 
   if (error) {
     return (
-      <div className="section">
+      <div className="presentation-slide">
         <h2>Live Analytics Dashboard</h2>
         <div className="error-message">{error}</div>
       </div>
@@ -51,7 +51,7 @@ function Dashboard() {
   }
 
   return (
-    <div className="section">
+    <div className="presentation-slide">
       <h2>Live Analytics Dashboard</h2>
       <p style={{ marginBottom: '20px', color: '#666', textAlign: 'center' }}>
         Real-time analysis of AVP beach volleyball match data, showcasing key performance metrics and trends.

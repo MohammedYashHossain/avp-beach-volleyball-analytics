@@ -57,7 +57,7 @@ function PredictForm() {
   };
 
   return (
-    <div className="section">
+    <div className="presentation-slide">
       <h2>Machine Learning Predictions</h2>
       <p style={{ marginBottom: '20px', color: '#666', textAlign: 'center' }}>
         Our advanced machine learning model analyzes team performance statistics to predict match outcomes 
