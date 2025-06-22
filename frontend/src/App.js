@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import './App.css';
 import Dashboard from './components/Dashboard';
 import PredictForm from './components/PredictForm';
+import volley1 from './images/Mo_Volley1.JPG';
+import volley2 from './images/Mo_Volley2.jpg';
+import volley3 from './images/Mo_Volley3.jpg';
 
 function App() {
   const [currentSection, setCurrentSection] = useState(0);
@@ -364,7 +367,7 @@ function App() {
                   textAlign: 'center'
                 }}>
                   <img 
-                    src="/images/Mo_Volley1.JPG" 
+                    src={volley1} 
                     alt="Volleyball Image 1" 
                     style={{ 
                       width: '100%', 
@@ -383,7 +386,7 @@ function App() {
                   textAlign: 'center'
                 }}>
                   <img 
-                    src="/images/Mo_Volley2.jpg" 
+                    src={volley2} 
                     alt="Volleyball Image 2" 
                     style={{ 
                       width: '100%', 
@@ -402,7 +405,7 @@ function App() {
                   textAlign: 'center'
                 }}>
                   <img 
-                    src="/images/Mo_Volley3.jpg" 
+                    src={volley3} 
                     alt="Volleyball Image 3" 
                     style={{ 
                       width: '100%', 
