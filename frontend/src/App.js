@@ -9,16 +9,16 @@ function App() {
   const sections = [
     {
       id: 0,
-      title: "🏐 Welcome to AVP Beach Volleyball Analytics",
+      title: "Welcome to AVP Beach Volleyball Analytics",
       subtitle: "Advanced Sports Analytics & Machine Learning Platform",
       content: (
         <div className="presentation-slide">
-          <h1>🏐 AVP Beach Volleyball Analytics</h1>
+          <h1>AVP Beach Volleyball Analytics</h1>
           <h2>Professional Sports Analytics & Machine Learning Platform</h2>
           <div className="hero-content">
             <p className="hero-description">
               This platform demonstrates how advanced data science and machine learning can transform 
-              sports analytics, providing insights into professional beach volleyball performance.
+              sports analytics, providing insights into professional beach volleyball performance and strategy.
             </p>
             <div className="feature-highlights">
               <div className="feature">
@@ -43,23 +43,23 @@ function App() {
     },
     {
       id: 1,
-      title: "📊 The Dataset: AVP Beach Volleyball 2022",
+      title: "The Dataset: AVP Beach Volleyball 2022",
       subtitle: "Understanding Our Data Foundation",
       content: (
         <div className="presentation-slide">
-          <h2>📊 The Dataset: AVP Beach Volleyball 2022</h2>
+          <h2>The Dataset: AVP Beach Volleyball 2022</h2>
           <div className="dataset-info">
             <div className="dataset-section">
-              <h3>🎯 What We Analyzed</h3>
+              <h3>What We Analyzed</h3>
               <ul>
                 <li><strong>300+ Professional Matches</strong> from the 2022 AVP season</li>
-                <li><strong>Team Performance Metrics:</strong> Kills, Digs, Errors, Aces</li>
-                <li><strong>Efficiency Calculations:</strong> Kill efficiency, overall performance ratios</li>
-                <li><strong>Match Outcomes:</strong> Win/loss patterns and competitive analysis</li>
+                <li><strong>Team Performance Metrics:</strong> Kills, digs, errors, aces, and service efficiency</li>
+                <li><strong>Advanced Statistics:</strong> Kill efficiency, sideout percentage, and defensive conversion rates</li>
+                <li><strong>Match Dynamics:</strong> Win/loss patterns, competitive balance, and performance trends</li>
               </ul>
             </div>
             <div className="dataset-section">
-              <h3>🔍 Key Statistics Tracked</h3>
+              <h3>Key Statistics Tracked</h3>
               <div className="stats-grid">
                 <div className="stat-item">
                   <span className="stat-number">10</span>
@@ -85,31 +85,34 @@ function App() {
     },
     {
       id: 2,
-      title: "🎯 Why This Data Matters",
+      title: "Why This Data Matters",
       subtitle: "The Importance of Sports Analytics",
       content: (
         <div className="presentation-slide">
-          <h2>🎯 Why This Data Matters</h2>
+          <h2>Why This Data Matters</h2>
           <div className="importance-grid">
             <div className="importance-card">
-              <h3>🏆 Performance Optimization</h3>
+              <h3>Performance Optimization</h3>
               <p>Understanding which statistics correlate most strongly with winning helps teams 
-              focus their training on the most impactful skills and strategies.</p>
+              focus their training on the most impactful skills. In beach volleyball, kill efficiency 
+              and sideout percentage are critical indicators of success.</p>
             </div>
             <div className="importance-card">
-              <h3>📈 Strategic Insights</h3>
+              <h3>Strategic Insights</h3>
               <p>Patterns in the data reveal which playing styles and tactics are most effective 
-              against different types of opponents.</p>
+              against different types of opponents. Teams can adjust their game plans based on 
+              historical performance data.</p>
             </div>
             <div className="importance-card">
-              <h3>🎲 Predictive Capabilities</h3>
+              <h3>Predictive Capabilities</h3>
               <p>Machine learning models can forecast match outcomes based on historical patterns, 
-              providing valuable insights for coaching and game planning.</p>
+              providing valuable insights for coaching decisions, player development, and game strategy.</p>
             </div>
             <div className="importance-card">
-              <h3>📊 Data-Driven Decisions</h3>
+              <h3>Data-Driven Decisions</h3>
               <p>Moving beyond intuition to evidence-based decision making in sports strategy, 
-              player development, and team composition.</p>
+              player development, and team composition. This approach is revolutionizing how 
+              professional sports are analyzed and coached.</p>
             </div>
           </div>
         </div>
@@ -117,37 +120,40 @@ function App() {
     },
     {
       id: 3,
-      title: "🔬 What We Can Do With This Data",
+      title: "What We Can Do With This Data",
       subtitle: "Advanced Analytics Capabilities",
       content: (
         <div className="presentation-slide">
-          <h2>🔬 What We Can Do With This Data</h2>
+          <h2>What We Can Do With This Data</h2>
           <div className="capabilities-container">
             <div className="capability-section">
-              <h3>📊 Descriptive Analytics</h3>
+              <h3>Descriptive Analytics</h3>
               <ul>
-                <li>Match outcome distribution and win rates</li>
-                <li>Performance trends over time</li>
-                <li>Team comparison metrics</li>
-                <li>Statistical averages and ranges</li>
+                <li>Match outcome distribution and win rates analysis</li>
+                <li>Performance trends over time and seasonal patterns</li>
+                <li>Team comparison metrics and competitive analysis</li>
+                <li>Statistical averages and performance ranges</li>
+                <li>Service and receiving efficiency breakdowns</li>
               </ul>
             </div>
             <div className="capability-section">
-              <h3>🔮 Predictive Analytics</h3>
+              <h3>Predictive Analytics</h3>
               <ul>
-                <li>Match winner prediction using ML models</li>
-                <li>Confidence scoring for predictions</li>
-                <li>Feature importance analysis</li>
-                <li>Performance forecasting</li>
+                <li>Match winner prediction using advanced ML models</li>
+                <li>Confidence scoring for predictions and risk assessment</li>
+                <li>Feature importance analysis for key performance indicators</li>
+                <li>Performance forecasting and trend prediction</li>
+                <li>Player and team development trajectory analysis</li>
               </ul>
             </div>
             <div className="capability-section">
-              <h3>📈 Prescriptive Analytics</h3>
+              <h3>Prescriptive Analytics</h3>
               <ul>
-                <li>Optimal strategy recommendations</li>
-                <li>Player development insights</li>
-                <li>Team composition optimization</li>
-                <li>Training focus areas</li>
+                <li>Optimal strategy recommendations based on opponent analysis</li>
+                <li>Player development insights and training focus areas</li>
+                <li>Team composition optimization and partnership analysis</li>
+                <li>Game plan development and tactical adjustments</li>
+                <li>Performance improvement recommendations</li>
               </ul>
             </div>
           </div>
@@ -156,49 +162,49 @@ function App() {
     },
     {
       id: 4,
-      title: "📈 Live Analytics Dashboard",
+      title: "Live Analytics Dashboard",
       subtitle: "Real-Time Data Visualization",
       content: <Dashboard />
     },
     {
       id: 5,
-      title: "🤖 Machine Learning Predictions",
+      title: "Machine Learning Predictions",
       subtitle: "AI-Powered Match Forecasting",
       content: <PredictForm />
     },
     {
       id: 6,
-      title: "🚀 Technical Architecture",
+      title: "Technical Architecture",
       subtitle: "How It All Works Together",
       content: (
         <div className="presentation-slide">
-          <h2>🚀 Technical Architecture</h2>
+          <h2>Technical Architecture</h2>
           <div className="architecture-container">
             <div className="arch-section">
-              <h3>🔧 Backend (Railway)</h3>
+              <h3>Backend (Railway)</h3>
               <ul>
-                <li><strong>Flask API:</strong> RESTful endpoints for data access</li>
-                <li><strong>Machine Learning:</strong> Random Forest model for predictions</li>
+                <li><strong>Flask API:</strong> RESTful endpoints for data access and ML predictions</li>
+                <li><strong>Machine Learning:</strong> Random Forest model for match outcome predictions</li>
                 <li><strong>Data Processing:</strong> Pandas for analytics and feature engineering</li>
-                <li><strong>Model Training:</strong> Scikit-learn for ML pipeline</li>
+                <li><strong>Model Training:</strong> Scikit-learn for ML pipeline and model optimization</li>
               </ul>
             </div>
             <div className="arch-section">
-              <h3>🎨 Frontend (Vercel)</h3>
+              <h3>Frontend (Vercel)</h3>
               <ul>
-                <li><strong>React:</strong> Interactive user interface</li>
-                <li><strong>Recharts:</strong> Data visualization components</li>
-                <li><strong>Axios:</strong> API communication</li>
-                <li><strong>Responsive Design:</strong> Works on all devices</li>
+                <li><strong>React:</strong> Interactive user interface with component-based architecture</li>
+                <li><strong>Recharts:</strong> Data visualization components for analytics display</li>
+                <li><strong>Axios:</strong> API communication and data fetching</li>
+                <li><strong>Responsive Design:</strong> Mobile-first approach for all devices</li>
               </ul>
             </div>
             <div className="arch-section">
-              <h3>📊 Data Pipeline</h3>
+              <h3>Data Pipeline</h3>
               <ul>
-                <li><strong>Data Collection:</strong> AVP match statistics</li>
-                <li><strong>Data Cleaning:</strong> Automated preprocessing</li>
-                <li><strong>Feature Engineering:</strong> Derived metrics and ratios</li>
-                <li><strong>Model Deployment:</strong> Real-time predictions</li>
+                <li><strong>Data Collection:</strong> AVP match statistics and performance metrics</li>
+                <li><strong>Data Cleaning:</strong> Automated preprocessing and quality assurance</li>
+                <li><strong>Feature Engineering:</strong> Derived metrics and performance ratios</li>
+                <li><strong>Model Deployment:</strong> Real-time predictions and API integration</li>
               </ul>
             </div>
           </div>
@@ -207,31 +213,35 @@ function App() {
     },
     {
       id: 7,
-      title: "🎯 Key Insights & Findings",
+      title: "Key Insights & Findings",
       subtitle: "What the Data Reveals",
       content: (
         <div className="presentation-slide">
-          <h2>🎯 Key Insights & Findings</h2>
+          <h2>Key Insights & Findings</h2>
           <div className="insights-container">
             <div className="insight-card">
-              <h3>🏆 Winning Factors</h3>
-              <p>Kill efficiency and ace serving are the strongest predictors of match success, 
-              with teams showing 75%+ kill efficiency winning 80% of their matches.</p>
+              <h3>Winning Factors</h3>
+              <p>Kill efficiency and ace serving are the strongest predictors of match success. 
+              Teams maintaining 75%+ kill efficiency win 80% of their matches, highlighting the 
+              critical importance of offensive execution in beach volleyball.</p>
             </div>
             <div className="insight-card">
-              <h3>📊 Performance Patterns</h3>
-              <p>Teams that maintain consistent defensive play (digs) while minimizing errors 
-              show the most sustainable success patterns over multiple matches.</p>
+              <h3>Performance Patterns</h3>
+              <p>Teams that maintain consistent defensive play while minimizing unforced errors 
+              show the most sustainable success patterns. The data reveals that defensive 
+              consistency often outweighs offensive explosiveness over multiple matches.</p>
             </div>
             <div className="insight-card">
-              <h3>🎲 Competitive Balance</h3>
+              <h3>Competitive Balance</h3>
               <p>The data shows a healthy competitive balance with no single strategy dominating, 
-              indicating the sport's strategic depth and skill requirements.</p>
+              indicating the sport's strategic depth. This balance makes beach volleyball 
+              particularly suitable for analytical modeling and prediction.</p>
             </div>
             <div className="insight-card">
-              <h3>🤖 ML Model Performance</h3>
+              <h3>ML Model Performance</h3>
               <p>Our Random Forest model achieves 80%+ accuracy in predicting match outcomes, 
-              demonstrating the predictive power of properly engineered sports statistics.</p>
+              demonstrating the predictive power of properly engineered sports statistics. 
+              The model's success validates the importance of kill efficiency and defensive metrics.</p>
             </div>
           </div>
         </div>
@@ -239,37 +249,37 @@ function App() {
     },
     {
       id: 8,
-      title: "🔮 Future Possibilities",
+      title: "Future Possibilities",
       subtitle: "Expanding the Analytics Platform",
       content: (
         <div className="presentation-slide">
-          <h2>🔮 Future Possibilities</h2>
+          <h2>Future Possibilities</h2>
           <div className="future-container">
             <div className="future-section">
-              <h3>📱 Enhanced Features</h3>
+              <h3>Enhanced Features</h3>
               <ul>
-                <li>Real-time match streaming integration</li>
-                <li>Player-specific analytics and tracking</li>
-                <li>Advanced visualization dashboards</li>
-                <li>Mobile application development</li>
+                <li>Real-time match streaming integration with live statistics</li>
+                <li>Player-specific analytics and individual performance tracking</li>
+                <li>Advanced visualization dashboards for coaches and analysts</li>
+                <li>Mobile application development for on-the-go insights</li>
               </ul>
             </div>
             <div className="future-section">
-              <h3>🤖 Advanced ML Models</h3>
+              <h3>Advanced ML Models</h3>
               <ul>
-                <li>Neural network implementations</li>
-                <li>Time-series analysis for trends</li>
-                <li>Multi-season pattern recognition</li>
-                <li>Personalized prediction models</li>
+                <li>Neural network implementations for complex pattern recognition</li>
+                <li>Time-series analysis for performance trend prediction</li>
+                <li>Multi-season pattern recognition and long-term forecasting</li>
+                <li>Personalized prediction models for specific player partnerships</li>
               </ul>
             </div>
             <div className="future-section">
-              <h3>🌐 Platform Expansion</h3>
+              <h3>Platform Expansion</h3>
               <ul>
-                <li>Multi-sport analytics platform</li>
-                <li>API marketplace for sports data</li>
-                <li>Integration with betting platforms</li>
-                <li>Educational analytics tools</li>
+                <li>Multi-sport analytics platform for comprehensive sports analysis</li>
+                <li>API marketplace for sports data and analytics services</li>
+                <li>Integration with coaching platforms and training systems</li>
+                <li>Educational analytics tools for sports science programs</li>
               </ul>
             </div>
           </div>
@@ -300,7 +310,7 @@ function App() {
         {/* Navigation Header */}
         <div className="presentation-header">
           <div className="header-content">
-            <h1>🏐 AVP Analytics</h1>
+            <h1>AVP Analytics</h1>
             <div className="section-indicator">
               {currentSection + 1} of {sections.length}
             </div>

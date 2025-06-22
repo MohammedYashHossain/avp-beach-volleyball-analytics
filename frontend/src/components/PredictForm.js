@@ -1,44 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 
 function PredictForm() {
   const [formData, setFormData] = useState({
-    team_a_total_kills: 15,
-    team_a_total_digs: 20,
-    team_a_total_errors: 5,
-    team_a_total_aces: 2,
-    team_b_total_kills: 12,
-    team_b_total_digs: 18,
-    team_b_total_errors: 7,
-    team_b_total_aces: 1,
-    team_a_kill_efficiency: 0.75,
-    team_b_kill_efficiency: 0.63
+    team_a_kills: '',
+    team_a_digs: '',
+    team_a_errors: '',
+    team_a_aces: '',
+    team_b_kills: '',
+    team_b_digs: '',
+    team_b_errors: '',
+    team_b_aces: ''
   });
-
   const [prediction, setPrediction] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [sampleData, setSampleData] = useState(null);
-
-  // Load sample prediction on component mount
-  useEffect(() => {
-    loadSamplePrediction();
-  }, []);
-
-  const loadSamplePrediction = async () => {
-    try {
-      const response = await axios.get('/sample-prediction');
-      setSampleData(response.data);
-    } catch (err) {
-      console.error('Failed to load sample prediction:', err);
-    }
-  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: parseFloat(value) || 0
+      [name]: value
     }));
   };
 
@@ -52,8 +34,8 @@ function PredictForm() {
       const response = await axios.post('/predict', formData);
       setPrediction(response.data);
     } catch (err) {
-      console.error('Prediction failed:', err);
-      setError(err.response?.data?.error || 'Failed to make prediction. Please try again.');
+      console.error('Prediction error:', err);
+      setError('Failed to generate prediction. Please check your input values and try again.');
     } finally {
       setLoading(false);
     }
@@ -61,338 +43,268 @@ function PredictForm() {
 
   const resetForm = () => {
     setFormData({
-      team_a_total_kills: 15,
-      team_a_total_digs: 20,
-      team_a_total_errors: 5,
-      team_a_total_aces: 2,
-      team_b_total_kills: 12,
-      team_b_total_digs: 18,
-      team_b_total_errors: 7,
-      team_b_total_aces: 1,
-      team_a_kill_efficiency: 0.75,
-      team_b_kill_efficiency: 0.63
+      team_a_kills: '',
+      team_a_digs: '',
+      team_a_errors: '',
+      team_a_aces: '',
+      team_b_kills: '',
+      team_b_digs: '',
+      team_b_errors: '',
+      team_b_aces: ''
     });
     setPrediction(null);
     setError(null);
   };
 
-  const loadSampleData = () => {
-    if (sampleData) {
-      setFormData(sampleData.sample_data);
-    }
-  };
-
   return (
     <div className="section">
-      <h2>🔮 AI-Powered Match Prediction</h2>
+      <h2>Machine Learning Predictions</h2>
       <p style={{ marginBottom: '20px', color: '#666', textAlign: 'center' }}>
-        Leverage machine learning to predict match outcomes based on comprehensive team statistics and performance metrics.
-        This demonstrates how AI can analyze complex sports data to forecast results.
+        Our advanced machine learning model analyzes team performance statistics to predict match outcomes 
+        with high accuracy. This demonstrates how artificial intelligence can provide valuable insights 
+        for sports strategy and competitive analysis.
       </p>
 
-      {/* Machine Learning Explanation */}
-      <div style={{ 
-        background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)', 
-        padding: '20px', 
-        borderRadius: '15px', 
-        marginBottom: '20px',
-        border: '1px solid #dee2e6'
-      }}>
-        <h4 style={{ color: '#2c3e50', marginBottom: '10px' }}>🤖 How Our ML Model Works</h4>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px' }}>
-          <div>
-            <strong>Random Forest Algorithm:</strong> Uses multiple decision trees to make predictions
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '30px', marginTop: '20px' }}>
+        {/* Input Form */}
+        <div>
+          <h3>Match Statistics Input</h3>
+          <p style={{ color: '#666', marginBottom: '20px' }}>
+            Enter the performance statistics for both teams to generate a prediction. The model considers 
+            kills (offensive success), digs (defensive plays), errors (unforced mistakes), and aces 
+            (service winners) to determine the likely winner.
+          </p>
+          
+          <form onSubmit={handleSubmit}>
+            <div style={{ marginBottom: '20px' }}>
+              <h4 style={{ color: '#2c3e50', marginBottom: '10px' }}>Team A Statistics</h4>
+              <div className="form-group">
+                <label>Kills (Offensive Success):</label>
+                <input
+                  type="number"
+                  name="team_a_kills"
+                  value={formData.team_a_kills}
+                  onChange={handleInputChange}
+                  placeholder="e.g., 25"
+                  min="0"
+                  required
+                />
+                <small style={{ color: '#666' }}>Successful offensive attacks that result in points</small>
+              </div>
+              <div className="form-group">
+                <label>Digs (Defensive Plays):</label>
+                <input
+                  type="number"
+                  name="team_a_digs"
+                  value={formData.team_a_digs}
+                  onChange={handleInputChange}
+                  placeholder="e.g., 15"
+                  min="0"
+                  required
+                />
+                <small style={{ color: '#666' }}>Successful defensive plays that keep the ball in play</small>
+              </div>
+              <div className="form-group">
+                <label>Errors (Unforced Mistakes):</label>
+                <input
+                  type="number"
+                  name="team_a_errors"
+                  value={formData.team_a_errors}
+                  onChange={handleInputChange}
+                  placeholder="e.g., 8"
+                  min="0"
+                  required
+                />
+                <small style={{ color: '#666' }}>Mistakes that give points to the opponent</small>
+              </div>
+              <div className="form-group">
+                <label>Aces (Service Winners):</label>
+                <input
+                  type="number"
+                  name="team_a_aces"
+                  value={formData.team_a_aces}
+                  onChange={handleInputChange}
+                  placeholder="e.g., 3"
+                  min="0"
+                  required
+                />
+                <small style={{ color: '#666' }}>Service plays that result in immediate points</small>
+              </div>
+            </div>
+
+            <div style={{ marginBottom: '20px' }}>
+              <h4 style={{ color: '#2c3e50', marginBottom: '10px' }}>Team B Statistics</h4>
+              <div className="form-group">
+                <label>Kills (Offensive Success):</label>
+                <input
+                  type="number"
+                  name="team_b_kills"
+                  value={formData.team_b_kills}
+                  onChange={handleInputChange}
+                  placeholder="e.g., 22"
+                  min="0"
+                  required
+                />
+                <small style={{ color: '#666' }}>Successful offensive attacks that result in points</small>
+              </div>
+              <div className="form-group">
+                <label>Digs (Defensive Plays):</label>
+                <input
+                  type="number"
+                  name="team_b_digs"
+                  value={formData.team_b_digs}
+                  onChange={handleInputChange}
+                  placeholder="e.g., 18"
+                  min="0"
+                  required
+                />
+                <small style={{ color: '#666' }}>Successful defensive plays that keep the ball in play</small>
+              </div>
+              <div className="form-group">
+                <label>Errors (Unforced Mistakes):</label>
+                <input
+                  type="number"
+                  name="team_b_errors"
+                  value={formData.team_b_errors}
+                  onChange={handleInputChange}
+                  placeholder="e.g., 10"
+                  min="0"
+                  required
+                />
+                <small style={{ color: '#666' }}>Mistakes that give points to the opponent</small>
+              </div>
+              <div className="form-group">
+                <label>Aces (Service Winners):</label>
+                <input
+                  type="number"
+                  name="team_b_aces"
+                  value={formData.team_b_aces}
+                  onChange={handleInputChange}
+                  placeholder="e.g., 2"
+                  min="0"
+                  required
+                />
+                <small style={{ color: '#666' }}>Service plays that result in immediate points</small>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <button type="submit" className="btn" disabled={loading}>
+                {loading ? 'Analyzing...' : 'Generate Prediction'}
+              </button>
+              <button type="button" className="btn" onClick={resetForm} style={{ background: '#95a5a6' }}>
+                Reset Form
+              </button>
+            </div>
+          </form>
+        </div>
+
+        {/* Results and Information */}
+        <div>
+          <h3>Prediction Results</h3>
+          <p style={{ color: '#666', marginBottom: '20px' }}>
+            The machine learning model analyzes the input statistics and provides a prediction with confidence level. 
+            This demonstrates how AI can process complex sports data to forecast outcomes based on historical patterns.
+          </p>
+
+          {loading && (
+            <div className="loading">
+              Analyzing team statistics and generating prediction...
+            </div>
+          )}
+
+          {error && (
+            <div className="result error">
+              <h4>Prediction Error</h4>
+              <p>{error}</p>
+            </div>
+          )}
+
+          {prediction && (
+            <div className="result success">
+              <h4>Match Prediction</h4>
+              <div style={{ marginBottom: '15px' }}>
+                <strong>Predicted Winner:</strong> {prediction.predicted_winner}
+              </div>
+              <div style={{ marginBottom: '15px' }}>
+                <strong>Confidence Level:</strong> {prediction.confidence}%
+              </div>
+              <div style={{ marginBottom: '15px' }}>
+                <strong>Model Accuracy:</strong> 80%+ (based on historical data)
+              </div>
+              <p style={{ fontSize: '0.9rem', opacity: 0.9 }}>
+                This prediction is based on the Random Forest algorithm analyzing patterns from 300+ professional matches.
+              </p>
+            </div>
+          )}
+
+          {/* Model Information */}
+          <div style={{ 
+            marginTop: '30px', 
+            padding: '20px', 
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', 
+            borderRadius: '15px',
+            color: 'white'
+          }}>
+            <h4 style={{ marginBottom: '15px' }}>Machine Learning Model Details</h4>
+            <div style={{ fontSize: '0.9rem', lineHeight: '1.6' }}>
+              <p><strong>Algorithm:</strong> Random Forest Classifier</p>
+              <p><strong>Training Data:</strong> 300+ professional AVP matches</p>
+              <p><strong>Key Features:</strong> Kills, digs, errors, and aces for both teams</p>
+              <p><strong>Model Performance:</strong> 80%+ accuracy on test data</p>
+              <p><strong>Prediction Logic:</strong> Analyzes statistical patterns to identify winning combinations</p>
+            </div>
           </div>
-          <div>
-            <strong>Feature Engineering:</strong> Combines raw stats into meaningful performance metrics
-          </div>
-          <div>
-            <strong>Training Data:</strong> Learned from 300+ professional matches
-          </div>
-          <div>
-            <strong>Accuracy:</strong> Achieves 80%+ prediction accuracy
+
+          {/* Strategy Insights */}
+          <div style={{ 
+            marginTop: '20px', 
+            padding: '20px', 
+            background: '#f8f9fa', 
+            borderRadius: '15px',
+            border: '1px solid #dee2e6'
+          }}>
+            <h4 style={{ marginBottom: '15px', color: '#2c3e50' }}>Strategic Insights</h4>
+            <div style={{ fontSize: '0.9rem', lineHeight: '1.6', color: '#555' }}>
+              <p><strong>Kill Efficiency:</strong> Teams with higher kill counts typically win more matches, as offensive success directly translates to points.</p>
+              <p><strong>Defensive Consistency:</strong> Digs indicate defensive skill and the ability to extend rallies, creating more scoring opportunities.</p>
+              <p><strong>Error Management:</strong> Minimizing unforced errors is crucial, as each error gives the opponent a point and momentum.</p>
+              <p><strong>Service Pressure:</strong> Aces provide immediate points and can disrupt opponent rhythm, making them valuable despite being less frequent.</p>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Sample Prediction Display */}
-      {sampleData && (
-        <div style={{ 
-          background: '#e8f4fd', 
-          padding: '15px', 
-          borderRadius: '8px', 
-          marginBottom: '20px',
-          border: '1px solid #bee5eb'
-        }}>
-          <h4>💡 Live Prediction Example</h4>
-          <p><strong>AI Prediction:</strong> {sampleData.prediction} wins</p>
-          <p><strong>Model Confidence:</strong> {(sampleData.confidence * 100).toFixed(1)}%</p>
-          <button 
-            onClick={loadSampleData}
-            style={{
-              background: '#17a2b8',
-              color: 'white',
-              border: 'none',
-              padding: '8px 16px',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              marginTop: '10px'
-            }}
-          >
-            Load Sample Data
-          </button>
-        </div>
-      )}
-
-      {/* Prediction Form */}
-      <form onSubmit={handleSubmit}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-          {/* Team A Stats */}
-          <div>
-            <h3 style={{ color: '#0088FE', marginBottom: '15px' }}>🏐 Team A Performance Metrics</h3>
-            
-            <div className="form-group">
-              <label>Total Kills:</label>
-              <input
-                type="number"
-                name="team_a_total_kills"
-                value={formData.team_a_total_kills}
-                onChange={handleInputChange}
-                min="0"
-                step="1"
-              />
-              <small style={{ color: '#666' }}>Offensive scoring plays</small>
-            </div>
-
-            <div className="form-group">
-              <label>Total Digs:</label>
-              <input
-                type="number"
-                name="team_a_total_digs"
-                value={formData.team_a_total_digs}
-                onChange={handleInputChange}
-                min="0"
-                step="1"
-              />
-              <small style={{ color: '#666' }}>Defensive saves</small>
-            </div>
-
-            <div className="form-group">
-              <label>Total Errors:</label>
-              <input
-                type="number"
-                name="team_a_total_errors"
-                value={formData.team_a_total_errors}
-                onChange={handleInputChange}
-                min="0"
-                step="1"
-              />
-              <small style={{ color: '#666' }}>Mistakes and faults</small>
-            </div>
-
-            <div className="form-group">
-              <label>Total Aces:</label>
-              <input
-                type="number"
-                name="team_a_total_aces"
-                value={formData.team_a_total_aces}
-                onChange={handleInputChange}
-                min="0"
-                step="1"
-              />
-              <small style={{ color: '#666' }}>Service winners</small>
-            </div>
-
-            <div className="form-group">
-              <label>Kill Efficiency (0-1):</label>
-              <input
-                type="number"
-                name="team_a_kill_efficiency"
-                value={formData.team_a_kill_efficiency}
-                onChange={handleInputChange}
-                min="0"
-                max="1"
-                step="0.01"
-              />
-              <small style={{ color: '#666' }}>Kills / (Kills + Errors)</small>
-            </div>
-          </div>
-
-          {/* Team B Stats */}
-          <div>
-            <h3 style={{ color: '#00C49F', marginBottom: '15px' }}>🏐 Team B Performance Metrics</h3>
-            
-            <div className="form-group">
-              <label>Total Kills:</label>
-              <input
-                type="number"
-                name="team_b_total_kills"
-                value={formData.team_b_total_kills}
-                onChange={handleInputChange}
-                min="0"
-                step="1"
-              />
-              <small style={{ color: '#666' }}>Offensive scoring plays</small>
-            </div>
-
-            <div className="form-group">
-              <label>Total Digs:</label>
-              <input
-                type="number"
-                name="team_b_total_digs"
-                value={formData.team_b_total_digs}
-                onChange={handleInputChange}
-                min="0"
-                step="1"
-              />
-              <small style={{ color: '#666' }}>Defensive saves</small>
-            </div>
-
-            <div className="form-group">
-              <label>Total Errors:</label>
-              <input
-                type="number"
-                name="team_b_total_errors"
-                value={formData.team_b_total_errors}
-                onChange={handleInputChange}
-                min="0"
-                step="1"
-              />
-              <small style={{ color: '#666' }}>Mistakes and faults</small>
-            </div>
-
-            <div className="form-group">
-              <label>Total Aces:</label>
-              <input
-                type="number"
-                name="team_b_total_aces"
-                value={formData.team_b_total_aces}
-                onChange={handleInputChange}
-                min="0"
-                step="1"
-              />
-              <small style={{ color: '#666' }}>Service winners</small>
-            </div>
-
-            <div className="form-group">
-              <label>Kill Efficiency (0-1):</label>
-              <input
-                type="number"
-                name="team_b_kill_efficiency"
-                value={formData.team_b_kill_efficiency}
-                onChange={handleInputChange}
-                min="0"
-                max="1"
-                step="0.01"
-              />
-              <small style={{ color: '#666' }}>Kills / (Kills + Errors)</small>
-            </div>
-          </div>
-        </div>
-
-        {/* Form Buttons */}
-        <div style={{ marginTop: '20px', display: 'flex', gap: '10px', justifyContent: 'center' }}>
-          <button 
-            type="submit" 
-            className="btn" 
-            disabled={loading}
-          >
-            {loading ? 'Analyzing...' : '🔮 Generate AI Prediction'}
-          </button>
-          
-          <button 
-            type="button" 
-            onClick={resetForm}
-            style={{
-              background: '#6c757d',
-              color: 'white',
-              padding: '12px 24px',
-              border: 'none',
-              borderRadius: '5px',
-              cursor: 'pointer',
-              fontSize: '16px'
-            }}
-          >
-            Reset Form
-          </button>
-        </div>
-      </form>
-
-      {/* Error Display */}
-      {error && (
-        <div className="result error">
-          <strong>❌ Error:</strong> {error}
-        </div>
-      )}
-
-      {/* Prediction Result */}
-      {prediction && (
-        <div className="result success" style={{ marginTop: '20px' }}>
-          <h3>🎯 AI Prediction Results</h3>
-          <div style={{ fontSize: '1.5rem', marginBottom: '10px' }}>
-            <strong>Predicted Winner: {prediction.prediction}</strong>
-          </div>
-          <div style={{ marginBottom: '10px' }}>
-            <strong>Model Confidence:</strong> {(prediction.confidence * 100).toFixed(1)}%
-          </div>
-          
-          <div style={{ marginTop: '15px' }}>
-            <h4>Win Probability Analysis:</h4>
-            <div style={{ display: 'flex', gap: '20px', justifyContent: 'center' }}>
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#0088FE' }}>
-                  Team A: {(prediction.probabilities['Team A'] * 100).toFixed(1)}%
-                </div>
-              </div>
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#00C49F' }}>
-                  Team B: {(prediction.probabilities['Team B'] * 100).toFixed(1)}%
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div style={{ marginTop: '15px', fontSize: '0.9rem', color: '#666' }}>
-            <p><strong>Analysis Features:</strong> {prediction.features_used.join(', ')}</p>
-          </div>
-        </div>
-      )}
-
-      {/* Model Info */}
+      {/* Technical Information */}
       <div style={{ 
-        marginTop: '30px', 
-        padding: '15px', 
-        background: '#f8f9fa', 
-        borderRadius: '8px',
-        border: '1px solid #dee2e6'
-      }}>
-        <h4>🤖 Machine Learning Model Details</h4>
-        <p>This prediction system utilizes a Random Forest machine learning model trained on comprehensive AVP beach volleyball match data.</p>
-        <p>The model analyzes key performance indicators including kills, digs, errors, aces, and kill efficiency to generate accurate match outcome predictions.</p>
-        <p><strong>Note:</strong> This is a demonstration of advanced sports analytics and should not be used for gambling or betting purposes.</p>
-      </div>
-
-      {/* Feature Importance Explanation */}
-      <div style={{ 
-        marginTop: '20px', 
-        padding: '20px', 
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', 
+        marginTop: '40px', 
+        padding: '25px', 
+        background: 'white', 
         borderRadius: '15px',
-        color: 'white'
+        border: '2px solid #ecf0f1'
       }}>
-        <h4 style={{ marginBottom: '15px' }}>🎯 Understanding the Prediction Factors</h4>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px' }}>
+        <h3 style={{ marginBottom: '15px', color: '#2c3e50' }}>Technical Implementation</h3>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
           <div>
-            <strong>Kill Efficiency:</strong> Most important factor - shows offensive effectiveness
+            <h4 style={{ color: '#3498db', marginBottom: '10px' }}>Data Processing</h4>
+            <p style={{ fontSize: '0.9rem', color: '#666', lineHeight: '1.6' }}>
+              Raw match statistics are processed and normalized to ensure consistent model performance. 
+              Feature engineering creates derived metrics that better capture performance patterns.
+            </p>
           </div>
           <div>
-            <strong>Total Kills:</strong> Direct scoring ability and offensive power
+            <h4 style={{ color: '#3498db', marginBottom: '10px' }}>Model Training</h4>
+            <p style={{ fontSize: '0.9rem', color: '#666', lineHeight: '1.6' }}>
+              The Random Forest algorithm is trained on historical match data, learning patterns 
+              that distinguish winning from losing performance combinations.
+            </p>
           </div>
           <div>
-            <strong>Total Errors:</strong> Negative impact - reduces winning probability
-          </div>
-          <div>
-            <strong>Total Aces:</strong> Service effectiveness and pressure creation
+            <h4 style={{ color: '#3498db', marginBottom: '10px' }}>Real-Time Prediction</h4>
+            <p style={{ fontSize: '0.9rem', color: '#666', lineHeight: '1.6' }}>
+              New match statistics are processed through the trained model to generate predictions 
+              with confidence scores, enabling real-time strategic insights.
+            </p>
           </div>
         </div>
       </div>

@@ -35,7 +35,7 @@ function Dashboard() {
   if (loading) {
     return (
       <div className="section">
-        <h2>📊 Live Analytics Dashboard</h2>
+        <h2>Live Analytics Dashboard</h2>
         <div className="loading">Loading comprehensive volleyball statistics...</div>
       </div>
     );
@@ -44,7 +44,7 @@ function Dashboard() {
   if (error) {
     return (
       <div className="section">
-        <h2>📊 Live Analytics Dashboard</h2>
+        <h2>Live Analytics Dashboard</h2>
         <div className="error-message">{error}</div>
       </div>
     );
@@ -52,10 +52,11 @@ function Dashboard() {
 
   return (
     <div className="section">
-      <h2>📊 Live Analytics Dashboard</h2>
+      <h2>Live Analytics Dashboard</h2>
       <p style={{ marginBottom: '20px', color: '#666', textAlign: 'center' }}>
         Real-time analysis of AVP beach volleyball match data, showcasing key performance metrics and trends.
-        This dashboard demonstrates how we can extract meaningful insights from sports statistics.
+        This dashboard demonstrates how we can extract meaningful insights from sports statistics to understand 
+        team performance, competitive dynamics, and strategic patterns.
       </p>
       
       {/* Basic Statistics Cards */}
@@ -97,9 +98,10 @@ function Dashboard() {
       {/* Charts Section */}
       {dashboardData && (
         <div style={{ marginTop: '30px' }}>
-          <h3>📈 Performance Analytics & Trends</h3>
+          <h3>Performance Analytics & Trends</h3>
           <p style={{ marginBottom: '20px', color: '#666' }}>
             Interactive visualizations showing performance patterns and statistical insights from professional beach volleyball matches.
+            These charts reveal the underlying dynamics that drive success in competitive beach volleyball.
           </p>
           
           {/* Win/Loss Distribution Pie Chart */}
@@ -109,6 +111,7 @@ function Dashboard() {
               <p style={{ color: '#666', marginBottom: '10px' }}>
                 Overall win distribution across all analyzed matches, providing insights into competitive balance.
                 This visualization helps us understand if the sport shows fair competition or if certain teams dominate.
+                A balanced distribution indicates a healthy competitive environment where skill and strategy determine outcomes.
               </p>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <ResponsiveContainer width="100%" height={300}>
@@ -141,7 +144,9 @@ function Dashboard() {
               <h4>Kill Efficiency Progression</h4>
               <p style={{ color: '#666', marginBottom: '10px' }}>
                 Tracking kill efficiency over time to identify performance trends and improvement patterns.
-                This chart shows how teams' offensive effectiveness changes throughout the season.
+                This chart shows how teams' offensive effectiveness changes throughout the season, revealing 
+                which teams are improving their attacking skills and which may be struggling with consistency.
+                Kill efficiency is a critical metric in beach volleyball as it directly correlates with scoring success.
               </p>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <ResponsiveContainer width="100%" height={300}>
@@ -165,7 +170,9 @@ function Dashboard() {
               <h4>Recent Match Scoring Analysis</h4>
               <p style={{ color: '#666', marginBottom: '10px' }}>
                 Score comparison across recent matches, highlighting offensive performance and scoring patterns.
-                This visualization helps identify which teams are currently performing better.
+                This visualization helps identify which teams are currently performing better and reveals 
+                scoring trends that can inform strategic decisions. In beach volleyball, consistent scoring 
+                often indicates strong sideout efficiency and effective offensive execution.
               </p>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <ResponsiveContainer width="100%" height={300}>
@@ -189,6 +196,9 @@ function Dashboard() {
               <h4>Team Performance Comparison</h4>
               <p style={{ color: '#666', marginBottom: '10px' }}>
                 Side-by-side comparison of key performance metrics between teams, showing strengths and weaknesses.
+                This analysis reveals which teams excel in different aspects of the game - whether it's 
+                offensive firepower, defensive consistency, or minimizing unforced errors. Understanding 
+                these performance differentials is crucial for strategic planning and player development.
               </p>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <ResponsiveContainer width="100%" height={300}>
@@ -230,10 +240,12 @@ function Dashboard() {
           {/* Top Matches Table */}
           {dashboardData.top_matches && dashboardData.top_matches.length > 0 && (
             <div>
-              <h4>🏆 High-Performance Match Analysis</h4>
+              <h4>High-Performance Match Analysis</h4>
               <p style={{ color: '#666', marginBottom: '10px' }}>
                 Matches with the highest combined kill counts, representing peak offensive performance.
-                These matches showcase the highest level of competitive play and offensive skill.
+                These matches showcase the highest level of competitive play and offensive skill, 
+                demonstrating what's possible when teams are firing on all cylinders. High-scoring 
+                matches often indicate excellent sideout efficiency and strong offensive execution.
               </p>
               <div style={{ overflowX: 'auto' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '10px' }}>
@@ -276,19 +288,19 @@ function Dashboard() {
             borderRadius: '15px',
             color: 'white'
           }}>
-            <h4 style={{ marginBottom: '15px' }}>🎯 Key Insights from the Data</h4>
+            <h4 style={{ marginBottom: '15px' }}>Key Insights from the Data</h4>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '15px' }}>
               <div>
-                <strong>Competitive Balance:</strong> The win distribution shows a healthy competitive environment.
+                <strong>Competitive Balance:</strong> The win distribution shows a healthy competitive environment where skill determines outcomes.
               </div>
               <div>
-                <strong>Performance Trends:</strong> Kill efficiency varies significantly, indicating skill differences.
+                <strong>Performance Trends:</strong> Kill efficiency varies significantly, indicating skill differences and training opportunities.
               </div>
               <div>
-                <strong>Scoring Patterns:</strong> Recent matches show consistent scoring ranges.
+                <strong>Scoring Patterns:</strong> Recent matches show consistent scoring ranges, suggesting predictable competitive dynamics.
               </div>
               <div>
-                <strong>Data Quality:</strong> Comprehensive statistics enable detailed analysis.
+                <strong>Data Quality:</strong> Comprehensive statistics enable detailed analysis of beach volleyball performance factors.
               </div>
             </div>
           </div>

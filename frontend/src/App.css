@@ -11,6 +11,7 @@ body {
   color: #333;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 .App {
@@ -24,10 +25,8 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  max-width: 1400px;
-  margin: 0 auto;
+  width: 100%;
   background: white;
-  box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
   position: relative;
 }
 
@@ -80,6 +79,7 @@ body {
   flex: 1;
   padding: 2rem;
   overflow-y: auto;
+  width: 100%;
 }
 
 .section-header {
@@ -119,7 +119,7 @@ body {
 /* Hero Section */
 .hero-content {
   text-align: center;
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -132,7 +132,7 @@ body {
 
 .feature-highlights {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
   margin-top: 3rem;
 }
@@ -152,7 +152,7 @@ body {
 }
 
 .feature-icon {
-  font-size: 3rem;
+  font-size: 2.5rem;
   display: block;
   margin-bottom: 1rem;
 }
@@ -233,7 +233,7 @@ body {
 /* Importance Grid */
 .importance-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: 2rem;
   margin-top: 2rem;
 }
@@ -265,7 +265,7 @@ body {
 /* Capabilities */
 .capabilities-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: 2rem;
   margin-top: 2rem;
 }
@@ -308,7 +308,7 @@ body {
 /* Architecture */
 .architecture-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: 2rem;
   margin-top: 2rem;
 }
@@ -345,7 +345,7 @@ body {
 /* Insights */
 .insights-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: 2rem;
   margin-top: 2rem;
 }
@@ -375,7 +375,7 @@ body {
 /* Future */
 .future-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: 2rem;
   margin-top: 2rem;
 }
@@ -422,6 +422,7 @@ body {
   justify-content: space-between;
   align-items: center;
   border-top: 1px solid #dee2e6;
+  width: 100%;
 }
 
 .nav-btn {
@@ -550,6 +551,7 @@ body {
   border-radius: 15px;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
   margin-bottom: 2rem;
+  width: 100%;
 }
 
 .stats-grid {
