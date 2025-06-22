@@ -359,7 +359,7 @@ function App() {
                 boxShadow: '0 5px 20px rgba(0, 0, 0, 0.1)'
               }}>
                 <img 
-                  src="https://via.placeholder.com/600x400/667eea/ffffff?text=Mo_Volley1.JPG" 
+                  src="/images/Mo_Volley1.JPG" 
                   alt="Volleyball Image 1" 
                   style={{ 
                     width: '100%', 
@@ -369,14 +369,6 @@ function App() {
                     display: 'block'
                   }}
                 />
-                <div style={{ 
-                  textAlign: 'center', 
-                  marginTop: '1rem',
-                  color: '#666',
-                  fontSize: '0.9rem'
-                }}>
-                  Your volleyball memories will display here
-                </div>
               </div>
               
               {/* Alternative: Direct image links for testing */}
