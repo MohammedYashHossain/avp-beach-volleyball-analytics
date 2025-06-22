@@ -1,83 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import Dashboard from './components/Dashboard';
-import PredictForm from './components/PredictForm';
-import { API_BASE_URL } from './config';
+import React from 'react';
 import './App.css';
 
-// Configure axios to use the correct API URL
-axios.defaults.baseURL = API_BASE_URL;
-
 function App() {
-  const [apiStatus, setApiStatus] = useState('checking');
-  const [error, setError] = useState(null);
-
-  // Check if the backend API is running
-  useEffect(() => {
-    const checkApiStatus = async () => {
-      try {
-        const response = await axios.get('/');
-        console.log('API is running:', response.data);
-        setApiStatus('connected');
-      } catch (err) {
-        console.error('API connection failed:', err);
-        setApiStatus('disconnected');
-        setError(`Backend API is not running. Please check if the backend is deployed at ${API_BASE_URL}`);
-      }
-    };
-
-    checkApiStatus();
-  }, []);
-
   return (
     <div className="App">
       <div className="container">
-        {/* Header with project info */}
         <div className="header">
           <h1>🏐 AVP Beach Volleyball Analytics</h1>
           <p>CS 301 Final Project - Data Science Applications</p>
           <p>Machine Learning Match Prediction Platform</p>
         </div>
 
-        {/* API Status */}
-        {apiStatus === 'checking' && (
-          <div className="section">
-            <div className="loading">Checking API connection...</div>
-          </div>
-        )}
+        <div className="section">
+          <h2>🚀 Frontend Deployed Successfully!</h2>
+          <p>This is a test deployment to ensure the build works.</p>
+          <p>Backend URL: https://avp-beach-volleyball-analytics-production-xxxx.up.railway.app</p>
+        </div>
 
-        {apiStatus === 'disconnected' && (
-          <div className="section">
-            <div className="error-message">
-              <h3>⚠️ Backend Not Connected</h3>
-              <p>{error}</p>
-              <p><strong>Current API URL:</strong> {API_BASE_URL}</p>
-              <p><strong>To fix this:</strong></p>
-              <ol>
-                <li>Deploy the backend to Railway or Render</li>
-                <li>Update the API URL in <code>frontend/src/config.js</code></li>
-                <li>Redeploy the frontend to Vercel</li>
-              </ol>
-            </div>
-          </div>
-        )}
-
-        {/* Main content when API is connected */}
-        {apiStatus === 'connected' && (
-          <>
-            {/* Dashboard Section */}
-            <Dashboard />
-            
-            {/* Prediction Form Section */}
-            <PredictForm />
-          </>
-        )}
-
-        {/* Footer */}
         <div className="section" style={{ textAlign: 'center', marginTop: '40px' }}>
           <p><strong>CS 301 Final Project</strong> - Spring 2024</p>
           <p>Built with React, Flask, and Machine Learning</p>
-          <p>Dataset: AVP Beach Volleyball 2022 Season</p>
         </div>
       </div>
     </div>
