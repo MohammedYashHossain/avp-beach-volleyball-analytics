@@ -386,8 +386,8 @@ function App() {
                   textAlign: 'center'
                 }}>
                   <img 
-                    src={volley2} 
-                    alt="Volleyball Image 2" 
+                    src={volley3} 
+                    alt="Volleyball Image 3" 
                     style={{ 
                       width: '100%', 
                       height: '250px', 
@@ -405,8 +405,8 @@ function App() {
                   textAlign: 'center'
                 }}>
                   <img 
-                    src={volley3} 
-                    alt="Volleyball Image 3" 
+                    src={volley2} 
+                    alt="Volleyball Image 2" 
                     style={{ 
                       width: '100%', 
                       height: '250px', 
