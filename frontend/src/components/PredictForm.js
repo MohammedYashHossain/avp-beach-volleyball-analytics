@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { BACKEND_URL } from '../config';
 
 function PredictForm() {
   const [formData, setFormData] = useState({
@@ -31,11 +32,17 @@ function PredictForm() {
     setPrediction(null);
 
     try {
-      const response = await axios.post('/predict', formData);
+      const response = await axios.post(`${BACKEND_URL}/predict`, formData);
       setPrediction(response.data);
     } catch (err) {
       console.error('Prediction error:', err);
-      setError('Failed to generate prediction. Please check your input values and try again.');
+      if (err.response?.status === 404) {
+        setError('Backend service not available. Please ensure the Railway backend is deployed and running.');
+      } else if (err.code === 'NETWORK_ERROR') {
+        setError('Unable to connect to the backend service. Please check your internet connection and try again.');
+      } else {
+        setError('Failed to generate prediction. Please check your input values and try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -199,7 +206,7 @@ function PredictForm() {
           </form>
         </div>
 
-        {/* Results and Information */}
+        {/* Results Display */}
         <div>
           <h3>Prediction Results</h3>
           <p style={{ color: '#666', marginBottom: '20px' }}>
@@ -207,34 +214,104 @@ function PredictForm() {
             This demonstrates how AI can process complex sports data to forecast outcomes based on historical patterns.
           </p>
 
-          {loading && (
-            <div className="loading">
-              Analyzing team statistics and generating prediction...
-            </div>
-          )}
-
           {error && (
-            <div className="result error">
-              <h4>Prediction Error</h4>
-              <p>{error}</p>
+            <div style={{ 
+              padding: '15px', 
+              background: '#fee', 
+              border: '1px solid #fcc', 
+              borderRadius: '8px', 
+              color: '#c33',
+              marginBottom: '20px'
+            }}>
+              <strong>Error:</strong> {error}
             </div>
           )}
 
-          {prediction && (
-            <div className="result success">
-              <h4>Match Prediction</h4>
-              <div style={{ marginBottom: '15px' }}>
-                <strong>Predicted Winner:</strong> {prediction.predicted_winner}
+          {loading && (
+            <div style={{ 
+              padding: '20px', 
+              background: '#f8f9fa', 
+              borderRadius: '8px', 
+              textAlign: 'center',
+              border: '1px solid #dee2e6'
+            }}>
+              <p style={{ color: '#666', margin: 0 }}>Processing prediction...</p>
+            </div>
+          )}
+
+          {prediction && !loading && (
+            <div style={{ 
+              padding: '20px', 
+              background: 'white', 
+              borderRadius: '15px',
+              boxShadow: '0 5px 20px rgba(0, 0, 0, 0.1)',
+              border: '2px solid #ecf0f1'
+            }}>
+              <h4 style={{ color: '#2c3e50', marginBottom: '15px' }}>AI Prediction Result</h4>
+              
+              <div style={{ 
+                padding: '15px', 
+                background: prediction.prediction === 'Team A' ? '#e8f5e8' : '#fff3cd',
+                borderRadius: '8px',
+                marginBottom: '15px',
+                border: `2px solid ${prediction.prediction === 'Team A' ? '#28a745' : '#ffc107'}`
+              }}>
+                <h5 style={{ 
+                  color: prediction.prediction === 'Team A' ? '#155724' : '#856404',
+                  margin: '0 0 10px 0'
+                }}>
+                  Predicted Winner: {prediction.prediction}
+                </h5>
+                <p style={{ 
+                  color: prediction.prediction === 'Team A' ? '#155724' : '#856404',
+                  margin: 0,
+                  fontSize: '0.9rem'
+                }}>
+                  Confidence: {(prediction.confidence * 100).toFixed(1)}%
+                </p>
               </div>
+
               <div style={{ marginBottom: '15px' }}>
-                <strong>Confidence Level:</strong> {prediction.confidence}%
+                <h5 style={{ color: '#2c3e50', marginBottom: '10px' }}>Win Probabilities</h5>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <div style={{ flex: 1, textAlign: 'center' }}>
+                    <div style={{ 
+                      background: '#3498db', 
+                      color: 'white', 
+                      padding: '10px', 
+                      borderRadius: '5px',
+                      fontSize: '0.9rem'
+                    }}>
+                      Team A: {(prediction.probabilities['Team A'] * 100).toFixed(1)}%
+                    </div>
+                  </div>
+                  <div style={{ flex: 1, textAlign: 'center' }}>
+                    <div style={{ 
+                      background: '#e74c3c', 
+                      color: 'white', 
+                      padding: '10px', 
+                      borderRadius: '5px',
+                      fontSize: '0.9rem'
+                    }}>
+                      Team B: {(prediction.probabilities['Team B'] * 100).toFixed(1)}%
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div style={{ marginBottom: '15px' }}>
-                <strong>Model Accuracy:</strong> 80%+ (based on historical data)
+
+              <div style={{ 
+                padding: '15px', 
+                background: '#f8f9fa', 
+                borderRadius: '8px',
+                border: '1px solid #dee2e6'
+              }}>
+                <h5 style={{ color: '#2c3e50', marginBottom: '10px' }}>Model Analysis</h5>
+                <p style={{ color: '#666', fontSize: '0.9rem', lineHeight: '1.6', margin: 0 }}>
+                  The Random Forest model analyzed {Object.keys(prediction.features_used).length} key performance metrics 
+                  to generate this prediction. The model considers kill efficiency, defensive consistency, 
+                  error management, and service pressure to determine the likely winner.
+                </p>
               </div>
-              <p style={{ fontSize: '0.9rem', opacity: 0.9 }}>
-                This prediction is based on the Random Forest algorithm analyzing patterns from 300+ professional matches.
-              </p>
             </div>
           )}
 
@@ -254,57 +331,6 @@ function PredictForm() {
               <p><strong>Model Performance:</strong> 80%+ accuracy on test data</p>
               <p><strong>Prediction Logic:</strong> Analyzes statistical patterns to identify winning combinations</p>
             </div>
-          </div>
-
-          {/* Strategy Insights */}
-          <div style={{ 
-            marginTop: '20px', 
-            padding: '20px', 
-            background: '#f8f9fa', 
-            borderRadius: '15px',
-            border: '1px solid #dee2e6'
-          }}>
-            <h4 style={{ marginBottom: '15px', color: '#2c3e50' }}>Strategic Insights</h4>
-            <div style={{ fontSize: '0.9rem', lineHeight: '1.6', color: '#555' }}>
-              <p><strong>Kill Efficiency:</strong> Teams with higher kill counts typically win more matches, as offensive success directly translates to points.</p>
-              <p><strong>Defensive Consistency:</strong> Digs indicate defensive skill and the ability to extend rallies, creating more scoring opportunities.</p>
-              <p><strong>Error Management:</strong> Minimizing unforced errors is crucial, as each error gives the opponent a point and momentum.</p>
-              <p><strong>Service Pressure:</strong> Aces provide immediate points and can disrupt opponent rhythm, making them valuable despite being less frequent.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Technical Information */}
-      <div style={{ 
-        marginTop: '40px', 
-        padding: '25px', 
-        background: 'white', 
-        borderRadius: '15px',
-        border: '2px solid #ecf0f1'
-      }}>
-        <h3 style={{ marginBottom: '15px', color: '#2c3e50' }}>Technical Implementation</h3>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
-          <div>
-            <h4 style={{ color: '#3498db', marginBottom: '10px' }}>Data Processing</h4>
-            <p style={{ fontSize: '0.9rem', color: '#666', lineHeight: '1.6' }}>
-              Raw match statistics are processed and normalized to ensure consistent model performance. 
-              Feature engineering creates derived metrics that better capture performance patterns.
-            </p>
-          </div>
-          <div>
-            <h4 style={{ color: '#3498db', marginBottom: '10px' }}>Model Training</h4>
-            <p style={{ fontSize: '0.9rem', color: '#666', lineHeight: '1.6' }}>
-              The Random Forest algorithm is trained on historical match data, learning patterns 
-              that distinguish winning from losing performance combinations.
-            </p>
-          </div>
-          <div>
-            <h4 style={{ color: '#3498db', marginBottom: '10px' }}>Real-Time Prediction</h4>
-            <p style={{ fontSize: '0.9rem', color: '#666', lineHeight: '1.6' }}>
-              New match statistics are processed through the trained model to generate predictions 
-              with confidence scores, enabling real-time strategic insights.
-            </p>
           </div>
         </div>
       </div>

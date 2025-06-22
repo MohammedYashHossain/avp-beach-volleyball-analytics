@@ -29,6 +29,15 @@ else:
     print("Warning: Data file not found. Using sample data.")
     df = None
 
+@app.route('/health')
+def health_check():
+    """Health check endpoint for Railway"""
+    return jsonify({
+        "status": "healthy",
+        "message": "AVP Beach Volleyball Analytics API is running",
+        "timestamp": datetime.now().isoformat()
+    })
+
 @app.route('/')
 def home():
     """API information endpoint"""
@@ -38,6 +47,7 @@ def home():
         "version": "1.0.0",
         "endpoints": {
             "/": "API information",
+            "/health": "Health check",
             "/stats": "Basic match statistics",
             "/dashboard": "Dashboard data for visualizations",
             "/predict": "Predict match winner (POST)",
@@ -170,18 +180,19 @@ def predict():
     try:
         data = request.get_json()
         
-        # Extract features
+        # Map frontend field names to model field names
         features = [
-            data['team_a_total_kills'],
-            data['team_a_total_digs'],
-            data['team_a_total_errors'],
-            data['team_a_total_aces'],
-            data['team_b_total_kills'],
-            data['team_b_total_digs'],
-            data['team_b_total_errors'],
-            data['team_b_total_aces'],
-            data['team_a_kill_efficiency'],
-            data['team_b_kill_efficiency']
+            data.get('team_a_kills', 0),  # team_a_total_kills
+            data.get('team_a_digs', 0),   # team_a_total_digs
+            data.get('team_a_errors', 0), # team_a_total_errors
+            data.get('team_a_aces', 0),   # team_a_total_aces
+            data.get('team_b_kills', 0),  # team_b_total_kills
+            data.get('team_b_digs', 0),   # team_b_total_digs
+            data.get('team_b_errors', 0), # team_b_total_errors
+            data.get('team_b_aces', 0),   # team_b_total_aces
+            # Calculate kill efficiency (kills / (kills + errors))
+            data.get('team_a_kills', 0) / max((data.get('team_a_kills', 0) + data.get('team_a_errors', 0)), 1),
+            data.get('team_b_kills', 0) / max((data.get('team_b_kills', 0) + data.get('team_b_errors', 0)), 1)
         ]
         
         # Make prediction
@@ -192,21 +203,29 @@ def predict():
         confidence = max(probabilities)
         
         return jsonify({
-            "prediction": prediction,
+            "prediction": "Team A" if prediction == 1 else "Team B",
             "confidence": round(confidence, 3),
             "probabilities": {
                 "Team A": round(probabilities[0], 3),
                 "Team B": round(probabilities[1], 3)
             },
-            "features_used": [
-                "Team A Kills", "Team A Digs", "Team A Errors", "Team A Aces",
-                "Team B Kills", "Team B Digs", "Team B Errors", "Team B Aces",
-                "Team A Kill Efficiency", "Team B Kill Efficiency"
-            ]
+            "features_used": {
+                "team_a_kills": features[0],
+                "team_a_digs": features[1],
+                "team_a_errors": features[2],
+                "team_a_aces": features[3],
+                "team_b_kills": features[4],
+                "team_b_digs": features[5],
+                "team_b_errors": features[6],
+                "team_b_aces": features[7],
+                "team_a_kill_efficiency": round(features[8], 3),
+                "team_b_kill_efficiency": round(features[9], 3)
+            }
         })
         
     except Exception as e:
-        return jsonify({"error": f"Prediction failed: {str(e)}"}), 400
+        print(f"Prediction error: {str(e)}")
+        return jsonify({"error": f"Prediction failed: {str(e)}"}), 500
 
 @app.route('/sample-prediction')
 def sample_prediction():

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, PieChart, Pie, Cell, AreaChart, Area, ResponsiveContainer } from 'recharts';
+import { BACKEND_URL } from '../config';
 
 function Dashboard() {
   const [stats, setStats] = useState(null);
@@ -14,16 +15,22 @@ function Dashboard() {
         setLoading(true);
         
         // Fetch basic stats
-        const statsResponse = await axios.get('/stats');
+        const statsResponse = await axios.get(`${BACKEND_URL}/stats`);
         setStats(statsResponse.data);
         
         // Fetch dashboard data for charts
-        const dashboardResponse = await axios.get('/dashboard');
+        const dashboardResponse = await axios.get(`${BACKEND_URL}/dashboard`);
         setDashboardData(dashboardResponse.data);
         
       } catch (err) {
         console.error('Error fetching dashboard data:', err);
-        setError('Failed to load dashboard data. Please try again.');
+        if (err.response?.status === 404) {
+          setError('Backend service not available. Please ensure the Railway backend is deployed and running.');
+        } else if (err.code === 'NETWORK_ERROR') {
+          setError('Unable to connect to the backend service. Please check your internet connection and try again.');
+        } else {
+          setError('Failed to load dashboard data. Please try again.');
+        }
       } finally {
         setLoading(false);
       }
@@ -36,7 +43,15 @@ function Dashboard() {
     return (
       <div className="presentation-slide">
         <h2>Live Analytics Dashboard</h2>
-        <div className="loading">Loading comprehensive volleyball statistics...</div>
+        <div style={{ 
+          padding: '20px', 
+          background: '#f8f9fa', 
+          borderRadius: '8px', 
+          textAlign: 'center',
+          border: '1px solid #dee2e6'
+        }}>
+          <p style={{ color: '#666', margin: 0 }}>Loading comprehensive volleyball statistics...</p>
+        </div>
       </div>
     );
   }
@@ -45,7 +60,15 @@ function Dashboard() {
     return (
       <div className="presentation-slide">
         <h2>Live Analytics Dashboard</h2>
-        <div className="error-message">{error}</div>
+        <div style={{ 
+          padding: '15px', 
+          background: '#fee', 
+          border: '1px solid #fcc', 
+          borderRadius: '8px', 
+          color: '#c33'
+        }}>
+          <strong>Error:</strong> {error}
+        </div>
       </div>
     );
   }
