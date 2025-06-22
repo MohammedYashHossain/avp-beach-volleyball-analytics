@@ -285,6 +285,172 @@ function App() {
           </div>
         </div>
       )
+    },
+    {
+      id: 9,
+      title: "Thank You!",
+      subtitle: "About the Creator",
+      content: (
+        <div className="presentation-slide">
+          <div style={{ textAlign: 'center', maxWidth: '1000px', margin: '0 auto' }}>
+            <h2>Thank You for Checking Out My Project!</h2>
+            
+            <div style={{ 
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', 
+              color: 'white', 
+              padding: '2rem', 
+              borderRadius: '20px',
+              marginBottom: '2rem'
+            }}>
+              <h3 style={{ marginBottom: '1rem', fontSize: '1.5rem' }}>Created by Mohammed Y. Hossain</h3>
+              <p style={{ fontSize: '1.1rem', lineHeight: '1.6' }}>
+                I love playing volleyball, especially beach volleyball, and wanted to create a project based off of my passion for the sport. 
+                This analytics platform combines my love for volleyball with my interest in data science and machine learning.
+              </p>
+            </div>
+
+            <div style={{ 
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+              gap: '2rem', 
+              marginBottom: '2rem' 
+            }}>
+              <div style={{ 
+                background: 'white', 
+                padding: '1.5rem', 
+                borderRadius: '15px', 
+                boxShadow: '0 5px 20px rgba(0, 0, 0, 0.1)',
+                border: '2px solid #ecf0f1'
+              }}>
+                <h4 style={{ color: '#2c3e50', marginBottom: '1rem' }}>🏐 My Volleyball Journey</h4>
+                <p style={{ color: '#555', lineHeight: '1.6' }}>
+                  Beach volleyball has been a huge part of my life. The combination of skill, strategy, and teamwork 
+                  makes it the perfect sport to analyze with data science techniques.
+                </p>
+              </div>
+              
+              <div style={{ 
+                background: 'white', 
+                padding: '1.5rem', 
+                borderRadius: '15px', 
+                boxShadow: '0 5px 20px rgba(0, 0, 0, 0.1)',
+                border: '2px solid #ecf0f1'
+              }}>
+                <h4 style={{ color: '#2c3e50', marginBottom: '1rem' }}>📊 The Project Vision</h4>
+                <p style={{ color: '#555', lineHeight: '1.6' }}>
+                  This project demonstrates how sports analytics can provide valuable insights into performance, 
+                  strategy, and competitive dynamics in beach volleyball.
+                </p>
+              </div>
+            </div>
+
+            {/* Volleyball Images Section */}
+            <div style={{ marginBottom: '2rem' }}>
+              <h3 style={{ color: '#2c3e50', marginBottom: '1.5rem' }}>Volleyball Memories</h3>
+              <div style={{ 
+                display: 'grid', 
+                gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
+                gap: '1.5rem' 
+              }}>
+                <div style={{ 
+                  background: 'white', 
+                  padding: '1rem', 
+                  borderRadius: '15px', 
+                  boxShadow: '0 5px 20px rgba(0, 0, 0, 0.1)',
+                  textAlign: 'center'
+                }}>
+                  <div style={{ 
+                    width: '100%', 
+                    height: '200px', 
+                    background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)', 
+                    borderRadius: '10px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '1rem',
+                    border: '2px dashed #dee2e6'
+                  }}>
+                    <p style={{ color: '#6c757d', fontSize: '0.9rem' }}>
+                      Mo_Volley1.jpg<br/>
+                      (Add your volleyball image here)
+                    </p>
+                  </div>
+                  <p style={{ color: '#666', fontSize: '0.9rem' }}>Beach Volleyball Action</p>
+                </div>
+                
+                <div style={{ 
+                  background: 'white', 
+                  padding: '1rem', 
+                  borderRadius: '15px', 
+                  boxShadow: '0 5px 20px rgba(0, 0, 0, 0.1)',
+                  textAlign: 'center'
+                }}>
+                  <div style={{ 
+                    width: '100%', 
+                    height: '200px', 
+                    background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)', 
+                    borderRadius: '10px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '1rem',
+                    border: '2px dashed #dee2e6'
+                  }}>
+                    <p style={{ color: '#6c757d', fontSize: '0.9rem' }}>
+                      Mo_Volley2.jpg<br/>
+                      (Add your volleyball image here)
+                    </p>
+                  </div>
+                  <p style={{ color: '#666', fontSize: '0.9rem' }}>Team Competition</p>
+                </div>
+                
+                <div style={{ 
+                  background: 'white', 
+                  padding: '1rem', 
+                  borderRadius: '15px', 
+                  boxShadow: '0 5px 20px rgba(0, 0, 0, 0.1)',
+                  textAlign: 'center'
+                }}>
+                  <div style={{ 
+                    width: '100%', 
+                    height: '200px', 
+                    background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)', 
+                    borderRadius: '10px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '1rem',
+                    border: '2px dashed #dee2e6'
+                  }}>
+                    <p style={{ color: '#6c757d', fontSize: '0.9rem' }}>
+                      Mo_Volley3.jpg<br/>
+                      (Add your volleyball image here)
+                    </p>
+                  </div>
+                  <p style={{ color: '#666', fontSize: '0.9rem' }}>Volleyball Passion</p>
+                </div>
+              </div>
+            </div>
+
+            <div style={{ 
+              background: '#f8f9fa', 
+              padding: '2rem', 
+              borderRadius: '15px',
+              border: '2px solid #dee2e6'
+            }}>
+              <h4 style={{ color: '#2c3e50', marginBottom: '1rem' }}>Connect & Learn More</h4>
+              <p style={{ color: '#555', lineHeight: '1.6', marginBottom: '1rem' }}>
+                This project showcases the intersection of sports passion and technical skills. 
+                Feel free to explore the analytics, try the predictions, and see how data science 
+                can enhance our understanding of sports performance.
+              </p>
+              <p style={{ color: '#666', fontSize: '0.9rem', fontStyle: 'italic' }}>
+                Built with React, Python, Flask, and Machine Learning • Deployed on Vercel & Railway
+              </p>
+            </div>
+          </div>
+        </div>
+      )
     }
   ];
 
