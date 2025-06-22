@@ -1,10 +1,10 @@
 # AVP Beach Volleyball Analytics Platform
 
 ## Project Overview
-This is my final project for CS 301 - Data Science Applications. I built a full-stack web platform to analyze beach volleyball data and predict match winners using machine learning.
+I built a full-stack web platform to analyze beach volleyball data and predict match winners using machine learning.
 
 ## What it does
-- Shows cool stats from AVP beach volleyball matches
+- Shows stats from AVP beach volleyball matches
 - Predicts who will win based on team performance using ML
 - Has interactive charts and visualizations
 - Uses Python for the backend and React for the frontend
