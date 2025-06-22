@@ -14,7 +14,7 @@ This guide will help you deploy your AVP Beach Volleyball Analytics Platform to 
    - Click "New Project"
    - Select "Deploy from GitHub repo"
    - Choose your repository
-   - Set the root directory to `backend`
+   - **IMPORTANT**: Set the root directory to `backend`
    - Railway will automatically detect it's a Python app
 
 3. **Configure Environment**
@@ -70,6 +70,25 @@ This guide will help you deploy your AVP Beach Volleyball Analytics Platform to 
    - Visit your Vercel URL
    - Should connect to your backend and show the dashboard
 
+## Railway Monorepo Configuration
+
+### If you get "monorepo without correct root directory" error:
+
+1. **In Railway Project Settings:**
+   - Go to your Railway project
+   - Click "Settings"
+   - Find "Root Directory" or "Source Directory"
+   - Set it to: `backend`
+
+2. **Alternative - Use Railway Configuration:**
+   - The `railway.json` file in the root should help
+   - Or use the `backend/railway.toml` file
+
+3. **Manual Configuration:**
+   - In Railway deployment settings
+   - Set "Root Directory" to `backend`
+   - Set "Start Command" to `bash start.sh`
+
 ## Option 2: Full-stack on Vercel (Alternative)
 
 ### Limitations:
@@ -84,8 +103,9 @@ This guide will help you deploy your AVP Beach Volleyball Analytics Platform to 
 
 ## Troubleshooting
 
-### Backend Issues:
-- **Model not loading**: Make sure `train_model.py` runs successfully
+### Railway Issues:
+- **Monorepo error**: Set root directory to `backend`
+- **Model not loading**: Check logs for training errors
 - **CORS errors**: Backend should handle CORS automatically
 - **Port issues**: Railway handles port configuration automatically
 
