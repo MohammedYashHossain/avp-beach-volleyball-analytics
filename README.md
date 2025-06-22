@@ -132,6 +132,4 @@ avp-analytics/
 - Inspiration: Professor's data science lectures
 
 ---
-*Created for CS 301 Final Project - Spring 2024*
 
-**Grade**: A- (Professor said it was "impressive for a sophomore") 
