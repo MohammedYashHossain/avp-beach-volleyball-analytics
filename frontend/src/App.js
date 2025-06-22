@@ -346,7 +346,6 @@ function App() {
 
             {/* Volleyball Images Section */}
             <div style={{ marginBottom: '2rem' }}>
-              <h3 style={{ color: '#2c3e50', marginBottom: '1.5rem' }}>Volleyball Memories</h3>
               <div style={{ 
                 display: 'grid', 
                 gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
@@ -360,7 +359,7 @@ function App() {
                   textAlign: 'center'
                 }}>
                   <img 
-                    src="/images/Mo_Volley1.JPG" 
+                    src={process.env.PUBLIC_URL + '/images/Mo_Volley1.JPG'} 
                     alt="Beach Volleyball Action" 
                     style={{ 
                       width: '100%', 
@@ -383,7 +382,7 @@ function App() {
                   textAlign: 'center'
                 }}>
                   <img 
-                    src="/images/Mo_Volley2.jpg" 
+                    src={process.env.PUBLIC_URL + '/images/Mo_Volley2.jpg'} 
                     alt="Team Competition" 
                     style={{ 
                       width: '100%', 
@@ -406,7 +405,7 @@ function App() {
                   textAlign: 'center'
                 }}>
                   <img 
-                    src="/images/Mo_Volley3.jpg" 
+                    src={process.env.PUBLIC_URL + '/images/Mo_Volley3.jpg'} 
                     alt="Volleyball Passion" 
                     style={{ 
                       width: '100%', 
