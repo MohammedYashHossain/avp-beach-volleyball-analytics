@@ -350,82 +350,67 @@ function App() {
               
               {/* Simple Image Carousel */}
               <div style={{ 
-                maxWidth: '600px', 
-                margin: '0 auto', 
-                position: 'relative',
-                background: 'white',
-                borderRadius: '15px',
-                padding: '1rem',
-                boxShadow: '0 5px 20px rgba(0, 0, 0, 0.1)'
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                gap: '1.5rem',
+                maxWidth: '1000px',
+                margin: '0 auto'
               }}>
-                <img 
-                  src="/images/Mo_Volley1.JPG" 
-                  alt="Volleyball Image 1" 
-                  style={{ 
-                    width: '100%', 
-                    height: '300px', 
-                    objectFit: 'cover', 
-                    borderRadius: '10px',
-                    display: 'block'
-                  }}
-                />
-              </div>
-              
-              {/* Alternative: Direct image links for testing */}
-              <div style={{ 
-                marginTop: '2rem', 
-                textAlign: 'center',
-                padding: '1rem',
-                background: '#f8f9fa',
-                borderRadius: '10px'
-              }}>
-                <p style={{ color: '#666', marginBottom: '1rem' }}>Image Test Links:</p>
-                <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-                  <a 
-                    href="/images/Mo_Volley1.JPG" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
+                <div style={{ 
+                  background: 'white',
+                  borderRadius: '15px',
+                  padding: '1rem',
+                  boxShadow: '0 5px 20px rgba(0, 0, 0, 0.1)',
+                  textAlign: 'center'
+                }}>
+                  <img 
+                    src="/images/Mo_Volley1.JPG" 
+                    alt="Volleyball Image 1" 
                     style={{ 
-                      padding: '0.5rem 1rem', 
-                      background: '#3498db', 
-                      color: 'white', 
-                      textDecoration: 'none', 
-                      borderRadius: '5px',
-                      fontSize: '0.9rem'
+                      width: '100%', 
+                      height: '250px', 
+                      objectFit: 'cover', 
+                      borderRadius: '10px'
                     }}
-                  >
-                    Test Image 1
-                  </a>
-                  <a 
-                    href="/images/Mo_Volley2.jpg" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
+                  />
+                </div>
+                
+                <div style={{ 
+                  background: 'white',
+                  borderRadius: '15px',
+                  padding: '1rem',
+                  boxShadow: '0 5px 20px rgba(0, 0, 0, 0.1)',
+                  textAlign: 'center'
+                }}>
+                  <img 
+                    src="/images/Mo_Volley2.jpg" 
+                    alt="Volleyball Image 2" 
                     style={{ 
-                      padding: '0.5rem 1rem', 
-                      background: '#3498db', 
-                      color: 'white', 
-                      textDecoration: 'none', 
-                      borderRadius: '5px',
-                      fontSize: '0.9rem'
+                      width: '100%', 
+                      height: '250px', 
+                      objectFit: 'cover', 
+                      borderRadius: '10px'
                     }}
-                  >
-                    Test Image 2
-                  </a>
-                  <a 
-                    href="/images/Mo_Volley3.jpg" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
+                  />
+                </div>
+                
+                <div style={{ 
+                  background: 'white',
+                  borderRadius: '15px',
+                  padding: '1rem',
+                  boxShadow: '0 5px 20px rgba(0, 0, 0, 0.1)',
+                  textAlign: 'center'
+                }}>
+                  <img 
+                    src="/images/Mo_Volley3.jpg" 
+                    alt="Volleyball Image 3" 
                     style={{ 
-                      padding: '0.5rem 1rem', 
-                      background: '#3498db', 
-                      color: 'white', 
-                      textDecoration: 'none', 
-                      borderRadius: '5px',
-                      fontSize: '0.9rem'
+                      width: '100%', 
+                      height: '250px', 
+                      objectFit: 'cover', 
+                      borderRadius: '10px'
                     }}
-                  >
-                    Test Image 3
-                  </a>
+                  />
                 </div>
               </div>
             </div>
