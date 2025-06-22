@@ -15,18 +15,28 @@ CORS(app)
 
 # Load the trained model
 model_path = os.path.join(os.path.dirname(__file__), 'model.pkl')
-if os.path.exists(model_path):
-    model = joblib.load(model_path)
-else:
-    print("Warning: Model file not found. Please run train_model.py first.")
+model = None
+try:
+    if os.path.exists(model_path):
+        model = joblib.load(model_path)
+        print("✅ Model loaded successfully")
+    else:
+        print("⚠️  Model file not found. Will train model on first request.")
+except Exception as e:
+    print(f"⚠️  Error loading model: {e}. Will train model on first request.")
     model = None
 
 # Load or create sample data
 data_path = os.path.join(os.path.dirname(__file__), 'data', 'volleyball_data.csv')
-if os.path.exists(data_path):
-    df = pd.read_csv(data_path)
-else:
-    print("Warning: Data file not found. Using sample data.")
+df = None
+try:
+    if os.path.exists(data_path):
+        df = pd.read_csv(data_path)
+        print("✅ Data loaded successfully")
+    else:
+        print("⚠️  Data file not found. Will use sample data.")
+except Exception as e:
+    print(f"⚠️  Error loading data: {e}. Will use sample data.")
     df = None
 
 @app.route('/health')
@@ -174,8 +184,24 @@ def get_dashboard_data():
 @app.route('/predict', methods=['POST'])
 def predict():
     """Predict match winner using ML model"""
+    global model, df
+    
+    # Train model if not available
     if model is None:
-        return jsonify({"error": "Model not available. Please run train_model.py first."}), 500
+        try:
+            print("🤖 Training model on-demand...")
+            from train_model import main as train_main
+            train_main()
+            
+            # Reload model
+            if os.path.exists(model_path):
+                model = joblib.load(model_path)
+                print("✅ Model trained and loaded successfully")
+            else:
+                return jsonify({"error": "Failed to train model. Please try again."}), 500
+        except Exception as e:
+            print(f"❌ Error training model: {e}")
+            return jsonify({"error": f"Model training failed: {str(e)}"}), 500
     
     try:
         data = request.get_json()

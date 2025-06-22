@@ -3,6 +3,8 @@
 // Railway backend URL - replace with your actual Railway URL
 // You can find this URL in your Railway dashboard after deploying
 // Example: https://your-app-name-production-xxxx.up.railway.app
+// 
+// REPLACE THE LINE BELOW WITH YOUR ACTUAL RAILWAY URL:
 export const BACKEND_URL = 'https://your-railway-app-name.railway.app';
 
 // Alternative: If you want to use a different backend service
@@ -16,6 +18,8 @@ export const BACKEND_URL = 'https://your-railway-app-name.railway.app';
 // 1. Deploy your backend to Railway (see RAILWAY_DEPLOYMENT.md)
 // 2. Replace the BACKEND_URL above with your actual Railway URL
 // 3. The URL should look like: https://your-app-name-production-xxxx.up.railway.app
+// 4. After updating, commit and push the changes to GitHub
+// 5. Vercel will automatically redeploy your frontend
 
 // API endpoints
 export const API_ENDPOINTS = {
