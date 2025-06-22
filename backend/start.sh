@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "=== Starting AVP Beach Volleyball API ==="
+echo "=== Starting AVP Beach Volleyball Analytics API ==="
 echo "Current directory: $(pwd)"
 echo "Python version: $(python --version)"
 
