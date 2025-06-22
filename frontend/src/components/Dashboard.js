@@ -8,9 +8,6 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Colors for charts (learned about this in class)
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
-
   useEffect(() => {
     const fetchData = async () => {
       try {
