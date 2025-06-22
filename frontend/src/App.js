@@ -7,19 +7,19 @@ function App() {
       <div className="container">
         <div className="header">
           <h1>🏐 AVP Beach Volleyball Analytics</h1>
-          <p>CS 301 Final Project - Data Science Applications</p>
-          <p>Machine Learning Match Prediction Platform</p>
+          <p>Advanced Data Analytics & Machine Learning Platform</p>
+          <p>Real-time Match Analysis & Predictive Modeling</p>
         </div>
 
         <div className="section">
-          <h2>🚀 Frontend Deployed Successfully!</h2>
-          <p>This is a test deployment to ensure the build works.</p>
-          <p>Backend URL: https://avp-beach-volleyball-analytics-production-xxxx.up.railway.app</p>
+          <h2>🚀 Welcome to Beach Volleyball Analytics</h2>
+          <p>This platform demonstrates advanced data science techniques applied to professional beach volleyball.</p>
+          <p>Explore real match statistics, performance trends, and AI-powered match predictions.</p>
         </div>
 
         <div className="section" style={{ textAlign: 'center', marginTop: '40px' }}>
-          <p><strong>CS 301 Final Project</strong> - Spring 2024</p>
-          <p>Built with React, Flask, and Machine Learning</p>
+          <p><strong>Professional Analytics Platform</strong> - Powered by Machine Learning</p>
+          <p>Built with React, Flask, and Advanced Data Science</p>
         </div>
       </div>
     </div>

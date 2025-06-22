@@ -84,8 +84,8 @@ function PredictForm() {
 
   return (
     <div className="section">
-      <h2>🔮 Match Prediction</h2>
-      <p>Enter team statistics to predict the match winner using our ML model!</p>
+      <h2>🔮 AI-Powered Match Prediction</h2>
+      <p>Leverage machine learning to predict match outcomes based on comprehensive team statistics and performance metrics.</p>
 
       {/* Sample Prediction Display */}
       {sampleData && (
@@ -96,9 +96,9 @@ function PredictForm() {
           marginBottom: '20px',
           border: '1px solid #bee5eb'
         }}>
-          <h4>💡 Sample Prediction</h4>
-          <p><strong>Prediction:</strong> {sampleData.prediction} wins</p>
-          <p><strong>Confidence:</strong> {(sampleData.confidence * 100).toFixed(1)}%</p>
+          <h4>💡 Live Prediction Example</h4>
+          <p><strong>AI Prediction:</strong> {sampleData.prediction} wins</p>
+          <p><strong>Model Confidence:</strong> {(sampleData.confidence * 100).toFixed(1)}%</p>
           <button 
             onClick={loadSampleData}
             style={{
@@ -121,7 +121,7 @@ function PredictForm() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
           {/* Team A Stats */}
           <div>
-            <h3 style={{ color: '#0088FE', marginBottom: '15px' }}>🏐 Team A Statistics</h3>
+            <h3 style={{ color: '#0088FE', marginBottom: '15px' }}>🏐 Team A Performance Metrics</h3>
             
             <div className="form-group">
               <label>Total Kills:</label>
@@ -187,7 +187,7 @@ function PredictForm() {
 
           {/* Team B Stats */}
           <div>
-            <h3 style={{ color: '#00C49F', marginBottom: '15px' }}>🏐 Team B Statistics</h3>
+            <h3 style={{ color: '#00C49F', marginBottom: '15px' }}>🏐 Team B Performance Metrics</h3>
             
             <div className="form-group">
               <label>Total Kills:</label>
@@ -259,7 +259,7 @@ function PredictForm() {
             className="btn" 
             disabled={loading}
           >
-            {loading ? 'Predicting...' : '🔮 Predict Winner'}
+            {loading ? 'Analyzing...' : '🔮 Generate AI Prediction'}
           </button>
           
           <button 
@@ -290,16 +290,16 @@ function PredictForm() {
       {/* Prediction Result */}
       {prediction && (
         <div className="result success" style={{ marginTop: '20px' }}>
-          <h3>🎯 Prediction Result</h3>
+          <h3>🎯 AI Prediction Results</h3>
           <div style={{ fontSize: '1.5rem', marginBottom: '10px' }}>
-            <strong>Winner: {prediction.prediction}</strong>
+            <strong>Predicted Winner: {prediction.prediction}</strong>
           </div>
           <div style={{ marginBottom: '10px' }}>
-            <strong>Confidence:</strong> {(prediction.confidence * 100).toFixed(1)}%
+            <strong>Model Confidence:</strong> {(prediction.confidence * 100).toFixed(1)}%
           </div>
           
           <div style={{ marginTop: '15px' }}>
-            <h4>Probability Breakdown:</h4>
+            <h4>Win Probability Analysis:</h4>
             <div style={{ display: 'flex', gap: '20px', justifyContent: 'center' }}>
               <div style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#0088FE' }}>
@@ -315,7 +315,7 @@ function PredictForm() {
           </div>
 
           <div style={{ marginTop: '15px', fontSize: '0.9rem', color: '#666' }}>
-            <p><strong>Features used:</strong> {prediction.features_used.join(', ')}</p>
+            <p><strong>Analysis Features:</strong> {prediction.features_used.join(', ')}</p>
           </div>
         </div>
       )}
@@ -328,10 +328,10 @@ function PredictForm() {
         borderRadius: '8px',
         border: '1px solid #dee2e6'
       }}>
-        <h4>🤖 About the Model</h4>
-        <p>This prediction uses a Random Forest machine learning model trained on AVP beach volleyball match data.</p>
-        <p>The model considers team statistics like kills, digs, errors, aces, and kill efficiency to predict match outcomes.</p>
-        <p><strong>Note:</strong> This is a demonstration model and should not be used for actual betting or serious predictions!</p>
+        <h4>🤖 Machine Learning Model Details</h4>
+        <p>This prediction system utilizes a Random Forest machine learning model trained on comprehensive AVP beach volleyball match data.</p>
+        <p>The model analyzes key performance indicators including kills, digs, errors, aces, and kill efficiency to generate accurate match outcome predictions.</p>
+        <p><strong>Note:</strong> This is a demonstration of advanced sports analytics and should not be used for gambling or betting purposes.</p>
       </div>
     </div>
   );

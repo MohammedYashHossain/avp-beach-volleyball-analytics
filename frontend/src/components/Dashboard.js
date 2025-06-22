@@ -35,8 +35,8 @@ function Dashboard() {
   if (loading) {
     return (
       <div className="section">
-        <h2>📊 Analytics Dashboard</h2>
-        <div className="loading">Loading volleyball statistics...</div>
+        <h2>📊 Live Analytics Dashboard</h2>
+        <div className="loading">Loading comprehensive volleyball statistics...</div>
       </div>
     );
   }
@@ -44,7 +44,7 @@ function Dashboard() {
   if (error) {
     return (
       <div className="section">
-        <h2>📊 Analytics Dashboard</h2>
+        <h2>📊 Live Analytics Dashboard</h2>
         <div className="error-message">{error}</div>
       </div>
     );
@@ -52,36 +52,43 @@ function Dashboard() {
 
   return (
     <div className="section">
-      <h2>📊 Analytics Dashboard</h2>
+      <h2>📊 Live Analytics Dashboard</h2>
+      <p style={{ marginBottom: '20px', color: '#666' }}>
+        Real-time analysis of AVP beach volleyball match data, showcasing key performance metrics and trends.
+      </p>
       
       {/* Basic Statistics Cards */}
       {stats && (
         <div className="stats-grid">
           <div className="stat-card">
-            <h3>Total Matches</h3>
+            <h3>Total Matches Analyzed</h3>
             <div className="value">{stats.total_matches}</div>
+            <p>Professional matches in dataset</p>
           </div>
           <div className="stat-card">
-            <h3>Team A Wins</h3>
+            <h3>Team A Win Rate</h3>
             <div className="value">{stats.team_a_wins}</div>
-            <p>({stats.win_percentage.team_a}%)</p>
+            <p>({stats.win_percentage.team_a}% success rate)</p>
           </div>
           <div className="stat-card">
-            <h3>Team B Wins</h3>
+            <h3>Team B Win Rate</h3>
             <div className="value">{stats.team_b_wins}</div>
-            <p>({stats.win_percentage.team_b}%)</p>
+            <p>({stats.win_percentage.team_b}% success rate)</p>
           </div>
           <div className="stat-card">
             <h3>Avg Team A Kills</h3>
             <div className="value">{stats.average_stats.team_a_kills}</div>
+            <p>Per match average</p>
           </div>
           <div className="stat-card">
             <h3>Avg Team B Kills</h3>
             <div className="value">{stats.average_stats.team_b_kills}</div>
+            <p>Per match average</p>
           </div>
           <div className="stat-card">
             <h3>Avg Team A Digs</h3>
             <div className="value">{stats.average_stats.team_a_digs}</div>
+            <p>Defensive plays per match</p>
           </div>
         </div>
       )}
@@ -89,12 +96,18 @@ function Dashboard() {
       {/* Charts Section */}
       {dashboardData && (
         <div style={{ marginTop: '30px' }}>
-          <h3>📈 Performance Trends</h3>
+          <h3>📈 Performance Analytics & Trends</h3>
+          <p style={{ marginBottom: '20px', color: '#666' }}>
+            Interactive visualizations showing performance patterns and statistical insights from professional beach volleyball matches.
+          </p>
           
           {/* Win/Loss Distribution Pie Chart */}
           {stats && (
             <div style={{ marginBottom: '30px' }}>
-              <h4>Match Results Distribution</h4>
+              <h4>Match Outcome Distribution</h4>
+              <p style={{ color: '#666', marginBottom: '10px' }}>
+                Overall win distribution across all analyzed matches, providing insights into competitive balance.
+              </p>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <PieChart width={400} height={300}>
                   <Pie
@@ -122,7 +135,10 @@ function Dashboard() {
           {/* Kill Efficiency Trend */}
           {dashboardData.efficiency_trend && dashboardData.efficiency_trend.length > 0 && (
             <div style={{ marginBottom: '30px' }}>
-              <h4>Kill Efficiency Over Time</h4>
+              <h4>Kill Efficiency Progression</h4>
+              <p style={{ color: '#666', marginBottom: '10px' }}>
+                Tracking kill efficiency over time to identify performance trends and improvement patterns.
+              </p>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <LineChart width={800} height={300} data={dashboardData.efficiency_trend}>
                   <CartesianGrid strokeDasharray="3 3" />
@@ -140,7 +156,10 @@ function Dashboard() {
           {/* Recent Matches Bar Chart */}
           {dashboardData.recent_matches && dashboardData.recent_matches.length > 0 && (
             <div style={{ marginBottom: '30px' }}>
-              <h4>Recent Match Scores</h4>
+              <h4>Recent Match Scoring Analysis</h4>
+              <p style={{ color: '#666', marginBottom: '10px' }}>
+                Score comparison across recent matches, highlighting offensive performance and scoring patterns.
+              </p>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <BarChart width={800} height={300} data={dashboardData.recent_matches}>
                   <CartesianGrid strokeDasharray="3 3" />
@@ -158,7 +177,10 @@ function Dashboard() {
           {/* Top Matches Table */}
           {dashboardData.top_matches && dashboardData.top_matches.length > 0 && (
             <div>
-              <h4>🏆 Highest Scoring Matches</h4>
+              <h4>🏆 High-Performance Match Analysis</h4>
+              <p style={{ color: '#666', marginBottom: '10px' }}>
+                Matches with the highest combined kill counts, representing peak offensive performance.
+              </p>
               <div style={{ overflowX: 'auto' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '10px' }}>
                   <thead>
