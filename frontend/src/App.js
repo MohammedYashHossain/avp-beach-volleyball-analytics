@@ -2,7 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Dashboard from './components/Dashboard';
 import PredictForm from './components/PredictForm';
+import { API_BASE_URL } from './config';
 import './App.css';
+
+// Configure axios to use the correct API URL
+axios.defaults.baseURL = API_BASE_URL;
 
 function App() {
   const [apiStatus, setApiStatus] = useState('checking');
@@ -18,7 +22,7 @@ function App() {
       } catch (err) {
         console.error('API connection failed:', err);
         setApiStatus('disconnected');
-        setError('Backend API is not running. Please start the Flask server first.');
+        setError(`Backend API is not running. Please check if the backend is deployed at ${API_BASE_URL}`);
       }
     };
 
@@ -47,13 +51,12 @@ function App() {
             <div className="error-message">
               <h3>⚠️ Backend Not Connected</h3>
               <p>{error}</p>
+              <p><strong>Current API URL:</strong> {API_BASE_URL}</p>
               <p><strong>To fix this:</strong></p>
               <ol>
-                <li>Open a terminal and navigate to the <code>backend</code> folder</li>
-                <li>Run: <code>pip install -r requirements.txt</code></li>
-                <li>Run: <code>python train_model.py</code></li>
-                <li>Run: <code>python api.py</code></li>
-                <li>Refresh this page</li>
+                <li>Deploy the backend to Railway or Render</li>
+                <li>Update the API URL in <code>frontend/src/config.js</code></li>
+                <li>Redeploy the frontend to Vercel</li>
               </ol>
             </div>
           </div>

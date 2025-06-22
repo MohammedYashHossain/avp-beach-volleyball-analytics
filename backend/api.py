@@ -55,7 +55,8 @@ def home():
             "/dashboard": "GET - Get dashboard data"
         },
         "author": "CS 301 Student",
-        "project": "Beach Volleyball Analytics"
+        "project": "Beach Volleyball Analytics",
+        "status": "running"
     })
 
 @app.route('/predict', methods=['POST'])
@@ -209,6 +210,15 @@ def get_sample_prediction():
         }
     })
 
+@app.route('/health', methods=['GET'])
+def health_check():
+    """Health check endpoint for deployment platforms"""
+    return jsonify({
+        "status": "healthy",
+        "model_loaded": model is not None,
+        "data_loaded": df is not None
+    })
+
 @app.errorhandler(404)
 def not_found(error):
     return jsonify({"error": "Endpoint not found"}), 404
@@ -224,12 +234,16 @@ if __name__ == '__main__':
     if load_model_and_data():
         print("✓ Everything loaded successfully!")
         print("API is ready to serve requests")
-        print("Frontend can connect to: http://localhost:5000")
+        
+        # Get port from environment variable (for deployment platforms)
+        port = int(os.environ.get('PORT', 5000))
+        
+        print(f"Frontend can connect to: http://localhost:{port}")
         print("Press Ctrl+C to stop the server")
         print()
         
         # Run the Flask app
-        app.run(debug=True, host='0.0.0.0', port=5000)
+        app.run(debug=False, host='0.0.0.0', port=port)
     else:
         print("❌ Failed to load model or data")
         print("Please run train_model.py first to create the model") 
