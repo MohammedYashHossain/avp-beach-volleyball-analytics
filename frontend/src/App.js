@@ -360,7 +360,7 @@ function App() {
                   textAlign: 'center'
                 }}>
                   <img 
-                    src="/images/Mo_Volley1.jpg" 
+                    src={process.env.PUBLIC_URL + '/images/Mo_Volley1.JPG'} 
                     alt="Beach Volleyball Action" 
                     style={{ 
                       width: '100%', 
@@ -369,7 +369,27 @@ function App() {
                       borderRadius: '10px',
                       marginBottom: '1rem'
                     }}
+                    onLoad={() => console.log('Image 1 loaded successfully')}
+                    onError={(e) => {
+                      console.error('Failed to load image 1:', e.target.src);
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'block';
+                    }}
                   />
+                  <div style={{ 
+                    display: 'none',
+                    width: '100%', 
+                    height: '200px', 
+                    background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)', 
+                    borderRadius: '10px',
+                    marginBottom: '1rem',
+                    border: '2px dashed #dee2e6',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    <p style={{ color: '#6c757d', fontSize: '0.9rem' }}>Image loading...</p>
+                  </div>
                   <p style={{ color: '#666', fontSize: '0.9rem' }}>Beach Volleyball Action</p>
                 </div>
                 
@@ -381,7 +401,7 @@ function App() {
                   textAlign: 'center'
                 }}>
                   <img 
-                    src="/images/Mo_Volley2.jpg" 
+                    src={process.env.PUBLIC_URL + '/images/Mo_Volley2.jpg'} 
                     alt="Team Competition" 
                     style={{ 
                       width: '100%', 
@@ -390,7 +410,27 @@ function App() {
                       borderRadius: '10px',
                       marginBottom: '1rem'
                     }}
+                    onLoad={() => console.log('Image 2 loaded successfully')}
+                    onError={(e) => {
+                      console.error('Failed to load image 2:', e.target.src);
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'block';
+                    }}
                   />
+                  <div style={{ 
+                    display: 'none',
+                    width: '100%', 
+                    height: '200px', 
+                    background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)', 
+                    borderRadius: '10px',
+                    marginBottom: '1rem',
+                    border: '2px dashed #dee2e6',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    <p style={{ color: '#6c757d', fontSize: '0.9rem' }}>Image loading...</p>
+                  </div>
                   <p style={{ color: '#666', fontSize: '0.9rem' }}>Team Competition</p>
                 </div>
                 
@@ -402,7 +442,7 @@ function App() {
                   textAlign: 'center'
                 }}>
                   <img 
-                    src="/images/Mo_Volley3.jpg" 
+                    src={process.env.PUBLIC_URL + '/images/Mo_Volley3.jpg'} 
                     alt="Volleyball Passion" 
                     style={{ 
                       width: '100%', 
@@ -411,7 +451,27 @@ function App() {
                       borderRadius: '10px',
                       marginBottom: '1rem'
                     }}
+                    onLoad={() => console.log('Image 3 loaded successfully')}
+                    onError={(e) => {
+                      console.error('Failed to load image 3:', e.target.src);
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'block';
+                    }}
                   />
+                  <div style={{ 
+                    display: 'none',
+                    width: '100%', 
+                    height: '200px', 
+                    background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)', 
+                    borderRadius: '10px',
+                    marginBottom: '1rem',
+                    border: '2px dashed #dee2e6',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    <p style={{ color: '#6c757d', fontSize: '0.9rem' }}>Image loading...</p>
+                  </div>
                   <p style={{ color: '#666', fontSize: '0.9rem' }}>Volleyball Passion</p>
                 </div>
               </div>
