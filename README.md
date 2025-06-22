@@ -259,4 +259,4 @@ avp-beach-volleyball-analytics/
 
 <p align="center">
   <i>This project demonstrates modern full-stack development, machine learning applications, and sports analytics implementation.</i>
-</p> 
+</p>
