@@ -38,8 +38,10 @@ function PredictForm() {
       console.error('Prediction error:', err);
       if (err.response?.status === 404) {
         setError('Backend service not available. Please ensure the Railway backend is deployed and running.');
-      } else if (err.code === 'NETWORK_ERROR') {
-        setError('Unable to connect to the backend service. Please check your internet connection and try again.');
+      } else if (err.code === 'NETWORK_ERROR' || err.message?.includes('Network Error')) {
+        setError('Unable to connect to the backend service. Please check your internet connection and ensure the backend URL is correct in config.js');
+      } else if (err.message?.includes('your-railway-app-name')) {
+        setError('Backend URL not configured. Please update the BACKEND_URL in frontend/src/config.js with your actual Railway URL.');
       } else {
         setError('Failed to generate prediction. Please check your input values and try again.');
       }
