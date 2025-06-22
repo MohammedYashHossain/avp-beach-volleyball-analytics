@@ -359,22 +359,17 @@ function App() {
                   boxShadow: '0 5px 20px rgba(0, 0, 0, 0.1)',
                   textAlign: 'center'
                 }}>
-                  <div style={{ 
-                    width: '100%', 
-                    height: '200px', 
-                    background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)', 
-                    borderRadius: '10px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: '1rem',
-                    border: '2px dashed #dee2e6'
-                  }}>
-                    <p style={{ color: '#6c757d', fontSize: '0.9rem' }}>
-                      Mo_Volley1.jpg<br/>
-                      (Add your volleyball image here)
-                    </p>
-                  </div>
+                  <img 
+                    src="/images/Mo_Volley1.jpg" 
+                    alt="Beach Volleyball Action" 
+                    style={{ 
+                      width: '100%', 
+                      height: '200px', 
+                      objectFit: 'cover', 
+                      borderRadius: '10px',
+                      marginBottom: '1rem'
+                    }}
+                  />
                   <p style={{ color: '#666', fontSize: '0.9rem' }}>Beach Volleyball Action</p>
                 </div>
                 
@@ -385,22 +380,17 @@ function App() {
                   boxShadow: '0 5px 20px rgba(0, 0, 0, 0.1)',
                   textAlign: 'center'
                 }}>
-                  <div style={{ 
-                    width: '100%', 
-                    height: '200px', 
-                    background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)', 
-                    borderRadius: '10px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: '1rem',
-                    border: '2px dashed #dee2e6'
-                  }}>
-                    <p style={{ color: '#6c757d', fontSize: '0.9rem' }}>
-                      Mo_Volley2.jpg<br/>
-                      (Add your volleyball image here)
-                    </p>
-                  </div>
+                  <img 
+                    src="/images/Mo_Volley2.jpg" 
+                    alt="Team Competition" 
+                    style={{ 
+                      width: '100%', 
+                      height: '200px', 
+                      objectFit: 'cover', 
+                      borderRadius: '10px',
+                      marginBottom: '1rem'
+                    }}
+                  />
                   <p style={{ color: '#666', fontSize: '0.9rem' }}>Team Competition</p>
                 </div>
                 
@@ -411,22 +401,17 @@ function App() {
                   boxShadow: '0 5px 20px rgba(0, 0, 0, 0.1)',
                   textAlign: 'center'
                 }}>
-                  <div style={{ 
-                    width: '100%', 
-                    height: '200px', 
-                    background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)', 
-                    borderRadius: '10px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: '1rem',
-                    border: '2px dashed #dee2e6'
-                  }}>
-                    <p style={{ color: '#6c757d', fontSize: '0.9rem' }}>
-                      Mo_Volley3.jpg<br/>
-                      (Add your volleyball image here)
-                    </p>
-                  </div>
+                  <img 
+                    src="/images/Mo_Volley3.jpg" 
+                    alt="Volleyball Passion" 
+                    style={{ 
+                      width: '100%', 
+                      height: '200px', 
+                      objectFit: 'cover', 
+                      borderRadius: '10px',
+                      marginBottom: '1rem'
+                    }}
+                  />
                   <p style={{ color: '#666', fontSize: '0.9rem' }}>Volleyball Passion</p>
                 </div>
               </div>
