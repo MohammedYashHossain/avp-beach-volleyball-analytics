@@ -1,74 +1,152 @@
 # Deployment Guide
 
-This guide will help you deploy your AVP Beach Volleyball Analytics Platform to production.
+This guide covers deploying both the frontend and backend components of the Beach Volleyball Analytics Platform.
 
-## Option 1: Frontend on Vercel + Backend on Railway (Recommended)
+## Backend Deployment (Railway)
 
-### Step 1: Deploy Backend to Railway
+### Prerequisites
+- Railway account
+- Git repository with the project
 
-1. **Create Railway Account**
-   - Go to [railway.app](https://railway.app)
-   - Sign up with your GitHub account
+### Deployment Steps
 
-2. **Deploy Backend**
-   - Click "New Project"
-   - Select "Deploy from GitHub repo"
-   - Choose your repository
+1. **Connect to Railway**
+   - Go to [Railway.app](https://railway.app)
+   - Sign in with GitHub
+   - Click "New Project" → "Deploy from GitHub repo"
+
+2. **Configure Repository Settings**
+   - Select your repository
    - **IMPORTANT**: Set the root directory to `backend`
-   - Railway will automatically detect it's a Python app
+   - Railway will automatically detect it's a Python project
 
-3. **Configure Environment**
-   - Railway will install dependencies from `requirements.txt`
-   - The app will start automatically using the `Procfile`
-
-4. **Get Your Backend URL**
-   - Once deployed, Railway will give you a URL like: `https://your-app-name.railway.app`
-   - Copy this URL
-
-### Step 2: Update Frontend Configuration
-
-1. **Update API URL**
-   - Edit `frontend/src/config.js`
-   - Replace `https://your-backend-url.railway.app` with your actual Railway URL
-
-2. **Commit and Push Changes**
-   ```bash
-   git add .
-   git commit -m "Update API URL for production"
-   git push
+3. **Environment Variables**
+   - Add these environment variables in Railway dashboard:
+   ```
+   PORT=8000
    ```
 
-### Step 3: Deploy Frontend to Vercel
+4. **Deploy**
+   - Railway will automatically build and deploy using the configuration files:
+     - `nixpacks.toml` - Build configuration
+     - `Procfile` - Process definition
+     - `requirements.txt` - Python dependencies
 
-1. **Create Vercel Account**
-   - Go to [vercel.com](https://vercel.com)
-   - Sign up with your GitHub account
+### Troubleshooting Nixpacks Build Issues
 
-2. **Deploy Frontend**
+If you encounter "Nixpacks were unable to generate a build" errors:
+
+1. **Check Root Directory**
+   - Ensure the root directory is set to `backend` in Railway settings
+   - This is crucial for finding the correct configuration files
+
+2. **Verify Configuration Files**
+   - `nixpacks.toml` - Explicit build configuration
+   - `Procfile` - Process definition
+   - `requirements.txt` - Python dependencies
+   - `runtime.txt` - Python version
+
+3. **Common Solutions**
+   - **Redeploy**: Sometimes a simple redeploy fixes build issues
+   - **Clear Cache**: In Railway dashboard, try "Clear Build Cache"
+   - **Check Logs**: Review build logs for specific error messages
+
+4. **Alternative Deployment**
+   If Nixpacks continues to fail, you can:
+   - Use Railway's "Deploy from Dockerfile" option
+   - Create a simple Dockerfile in the backend directory
+
+### Backend URL
+After successful deployment, Railway will provide a URL like:
+```
+https://your-app-name.railway.app
+```
+
+## Frontend Deployment (Vercel)
+
+### Prerequisites
+- Vercel account
+- Node.js installed locally (for testing)
+
+### Deployment Steps
+
+1. **Connect to Vercel**
+   - Go to [Vercel.com](https://vercel.com)
+   - Sign in with GitHub
    - Click "New Project"
+
+2. **Configure Repository**
    - Import your GitHub repository
    - Set the root directory to `frontend`
-   - Vercel will automatically detect it's a React app
+   - Vercel will auto-detect it's a React project
 
-3. **Configure Build Settings**
-   - Framework Preset: Create React App
-   - Build Command: `npm run build`
-   - Output Directory: `build`
-   - Install Command: `npm install`
+3. **Environment Variables**
+   - Add the backend URL as an environment variable:
+   ```
+   REACT_APP_API_URL=https://your-railway-app.railway.app
+   ```
 
 4. **Deploy**
-   - Click "Deploy"
-   - Vercel will build and deploy your app
+   - Vercel will automatically build and deploy
+   - The app will be available at the provided Vercel URL
 
-### Step 4: Test Your Deployment
+### Frontend URL
+After deployment, Vercel will provide a URL like:
+```
+https://your-app-name.vercel.app
+```
 
-1. **Test Backend**
-   - Visit your Railway URL + `/health`
-   - Should return: `{"status": "healthy", "model_loaded": true, "data_loaded": true}`
+## Testing the Deployment
+
+1. **Test Backend API**
+   ```bash
+   curl https://your-railway-app.railway.app/health
+   ```
 
 2. **Test Frontend**
    - Visit your Vercel URL
-   - Should connect to your backend and show the dashboard
+   - Try making a prediction using the form
+   - Check that it connects to the backend API
+
+## Local Development
+
+### Backend
+```bash
+cd backend
+pip install -r requirements.txt
+python train_model.py
+python api.py
+```
+
+### Frontend
+```bash
+cd frontend
+npm install
+npm start
+```
+
+## Troubleshooting
+
+### Common Issues
+
+1. **CORS Errors**
+   - Ensure the backend has CORS configured properly
+   - Check that the frontend API URL is correct
+
+2. **Model Not Found**
+   - Verify that `train_model.py` ran successfully
+   - Check that `model.pkl` exists in the backend directory
+
+3. **Build Failures**
+   - Check Railway logs for specific error messages
+   - Verify all required files are in the correct directories
+
+### Getting Help
+
+If you continue to have issues:
+1. Check the Railway build logs for specific error messages
+2. Verify all configuration files are present and correct
+3. Try deploying with a simpler configuration first
 
 ## Railway Monorepo Configuration
 
@@ -100,23 +178,6 @@ This guide will help you deploy your AVP Beach Volleyball Analytics Platform to 
 1. Create `vercel.json` in the root directory
 2. Configure serverless functions
 3. Deploy both frontend and backend to Vercel
-
-## Troubleshooting
-
-### Railway Issues:
-- **Monorepo error**: Set root directory to `backend`
-- **Model not loading**: Check logs for training errors
-- **CORS errors**: Backend should handle CORS automatically
-- **Port issues**: Railway handles port configuration automatically
-
-### Frontend Issues:
-- **API connection failed**: Check the API URL in `config.js`
-- **Build errors**: Check for missing dependencies
-- **CORS errors**: Backend should allow all origins
-
-### Environment Variables:
-- **Backend**: Railway automatically sets `PORT`
-- **Frontend**: Update `config.js` with correct API URL
 
 ## URLs to Update
 

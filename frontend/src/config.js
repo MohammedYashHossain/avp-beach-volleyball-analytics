@@ -4,9 +4,9 @@ const config = {
   development: {
     apiUrl: 'http://localhost:5000'
   },
-  // Production environment - replace with your actual backend URL
+  // Production environment - uses environment variable
   production: {
-    apiUrl: 'https://your-backend-url.railway.app' // You'll update this after deploying backend
+    apiUrl: process.env.REACT_APP_API_URL || 'https://your-backend-url.railway.app'
   }
 };
 
