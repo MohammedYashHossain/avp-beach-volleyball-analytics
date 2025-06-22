@@ -5,7 +5,7 @@
 // Example: https://your-app-name-production-xxxx.up.railway.app
 // 
 // REPLACE THE LINE BELOW WITH YOUR ACTUAL RAILWAY URL:
-export const BACKEND_URL = 'https://your-railway-app-name.railway.app';
+export const BACKEND_URL = 'https://avp-beach-volleyball-analytics-production.up.railway.app';
 
 // Alternative: If you want to use a different backend service
 // export const BACKEND_URL = 'https://your-heroku-app.herokuapp.com';
