@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, PieChart, Pie, Cell, AreaChart, Area, ResponsiveContainer } from 'recharts';
 
 function Dashboard() {
   const [stats, setStats] = useState(null);
@@ -53,8 +53,9 @@ function Dashboard() {
   return (
     <div className="section">
       <h2>📊 Live Analytics Dashboard</h2>
-      <p style={{ marginBottom: '20px', color: '#666' }}>
+      <p style={{ marginBottom: '20px', color: '#666', textAlign: 'center' }}>
         Real-time analysis of AVP beach volleyball match data, showcasing key performance metrics and trends.
+        This dashboard demonstrates how we can extract meaningful insights from sports statistics.
       </p>
       
       {/* Basic Statistics Cards */}
@@ -107,27 +108,29 @@ function Dashboard() {
               <h4>Match Outcome Distribution</h4>
               <p style={{ color: '#666', marginBottom: '10px' }}>
                 Overall win distribution across all analyzed matches, providing insights into competitive balance.
+                This visualization helps us understand if the sport shows fair competition or if certain teams dominate.
               </p>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <PieChart width={400} height={300}>
-                  <Pie
-                    data={[
-                      { name: 'Team A Wins', value: stats.team_a_wins },
-                      { name: 'Team B Wins', value: stats.team_b_wins }
-                    ]}
-                    cx={200}
-                    cy={150}
-                    labelLine={false}
-                    label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                    outerRadius={80}
-                    fill="#8884d8"
-                    dataKey="value"
-                  >
-                    <Cell fill="#0088FE" />
-                    <Cell fill="#00C49F" />
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
+                <ResponsiveContainer width="100%" height={300}>
+                  <PieChart>
+                    <Pie
+                      data={[
+                        { name: 'Team A Wins', value: stats.team_a_wins, fill: '#0088FE' },
+                        { name: 'Team B Wins', value: stats.team_b_wins, fill: '#00C49F' }
+                      ]}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                      outerRadius={80}
+                      dataKey="value"
+                    >
+                      <Cell fill="#0088FE" />
+                      <Cell fill="#00C49F" />
+                    </Pie>
+                    <Tooltip />
+                  </PieChart>
+                </ResponsiveContainer>
               </div>
             </div>
           )}
@@ -138,17 +141,20 @@ function Dashboard() {
               <h4>Kill Efficiency Progression</h4>
               <p style={{ color: '#666', marginBottom: '10px' }}>
                 Tracking kill efficiency over time to identify performance trends and improvement patterns.
+                This chart shows how teams' offensive effectiveness changes throughout the season.
               </p>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <LineChart width={800} height={300} data={dashboardData.efficiency_trend}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="match_number" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Line type="monotone" dataKey="team_a_kill_efficiency" stroke="#0088FE" name="Team A Efficiency" />
-                  <Line type="monotone" dataKey="team_b_kill_efficiency" stroke="#00C49F" name="Team B Efficiency" />
-                </LineChart>
+                <ResponsiveContainer width="100%" height={300}>
+                  <AreaChart data={dashboardData.efficiency_trend}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="match_number" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Area type="monotone" dataKey="team_a_kill_efficiency" stroke="#0088FE" fill="#0088FE" fillOpacity={0.3} name="Team A Efficiency" />
+                    <Area type="monotone" dataKey="team_b_kill_efficiency" stroke="#00C49F" fill="#00C49F" fillOpacity={0.3} name="Team B Efficiency" />
+                  </AreaChart>
+                </ResponsiveContainer>
               </div>
             </div>
           )}
@@ -159,17 +165,64 @@ function Dashboard() {
               <h4>Recent Match Scoring Analysis</h4>
               <p style={{ color: '#666', marginBottom: '10px' }}>
                 Score comparison across recent matches, highlighting offensive performance and scoring patterns.
+                This visualization helps identify which teams are currently performing better.
               </p>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <BarChart width={800} height={300} data={dashboardData.recent_matches}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="match_date" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="team_a_score" fill="#0088FE" name="Team A Score" />
-                  <Bar dataKey="team_b_score" fill="#00C49F" name="Team B Score" />
-                </BarChart>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={dashboardData.recent_matches}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="match_date" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="team_a_score" fill="#0088FE" name="Team A Score" />
+                    <Bar dataKey="team_b_score" fill="#00C49F" name="Team B Score" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          )}
+
+          {/* Performance Comparison */}
+          {stats && (
+            <div style={{ marginBottom: '30px' }}>
+              <h4>Team Performance Comparison</h4>
+              <p style={{ color: '#666', marginBottom: '10px' }}>
+                Side-by-side comparison of key performance metrics between teams, showing strengths and weaknesses.
+              </p>
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={[
+                    {
+                      metric: 'Kills',
+                      'Team A': stats.average_stats.team_a_kills,
+                      'Team B': stats.average_stats.team_b_kills
+                    },
+                    {
+                      metric: 'Digs',
+                      'Team A': stats.average_stats.team_a_digs,
+                      'Team B': stats.average_stats.team_b_digs
+                    },
+                    {
+                      metric: 'Errors',
+                      'Team A': stats.average_stats.team_a_errors,
+                      'Team B': stats.average_stats.team_b_errors
+                    },
+                    {
+                      metric: 'Aces',
+                      'Team A': stats.average_stats.team_a_aces,
+                      'Team B': stats.average_stats.team_b_aces
+                    }
+                  ]}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="metric" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="Team A" fill="#0088FE" />
+                    <Bar dataKey="Team B" fill="#00C49F" />
+                  </BarChart>
+                </ResponsiveContainer>
               </div>
             </div>
           )}
@@ -180,6 +233,7 @@ function Dashboard() {
               <h4>🏆 High-Performance Match Analysis</h4>
               <p style={{ color: '#666', marginBottom: '10px' }}>
                 Matches with the highest combined kill counts, representing peak offensive performance.
+                These matches showcase the highest level of competitive play and offensive skill.
               </p>
               <div style={{ overflowX: 'auto' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '10px' }}>
@@ -213,6 +267,31 @@ function Dashboard() {
               </div>
             </div>
           )}
+
+          {/* Data Insights Summary */}
+          <div style={{ 
+            marginTop: '40px', 
+            padding: '20px', 
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', 
+            borderRadius: '15px',
+            color: 'white'
+          }}>
+            <h4 style={{ marginBottom: '15px' }}>🎯 Key Insights from the Data</h4>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '15px' }}>
+              <div>
+                <strong>Competitive Balance:</strong> The win distribution shows a healthy competitive environment.
+              </div>
+              <div>
+                <strong>Performance Trends:</strong> Kill efficiency varies significantly, indicating skill differences.
+              </div>
+              <div>
+                <strong>Scoring Patterns:</strong> Recent matches show consistent scoring ranges.
+              </div>
+              <div>
+                <strong>Data Quality:</strong> Comprehensive statistics enable detailed analysis.
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
