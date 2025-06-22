@@ -11,7 +11,23 @@ from datetime import datetime, timedelta
 import random
 
 app = Flask(__name__)
-CORS(app)
+
+# Configure CORS more comprehensively
+CORS(app, resources={
+    r"/*": {
+        "origins": ["*"],
+        "methods": ["GET", "POST", "OPTIONS"],
+        "allow_headers": ["Content-Type", "Authorization"]
+    }
+})
+
+# Add CORS headers to all responses
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    return response
 
 # Load the trained model
 model_path = os.path.join(os.path.dirname(__file__), 'model.pkl')
@@ -38,6 +54,15 @@ try:
 except Exception as e:
     print(f"⚠️  Error loading data: {e}. Will use sample data.")
     df = None
+
+@app.route('/test')
+def test():
+    """Simple test endpoint"""
+    return jsonify({
+        "message": "Backend is working!",
+        "timestamp": datetime.now().isoformat(),
+        "status": "success"
+    })
 
 @app.route('/health')
 def health_check():
