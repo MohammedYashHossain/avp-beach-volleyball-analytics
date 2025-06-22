@@ -11,6 +11,8 @@ import joblib
 import numpy as np
 from datetime import datetime
 import os
+import subprocess
+import sys
 
 app = Flask(__name__)
 CORS(app)  # Allow frontend to connect (had CORS issues before)
@@ -20,11 +22,34 @@ model = None
 feature_columns = None
 df = None
 
+def train_model_if_needed():
+    """Train the model if it doesn't exist"""
+    if not os.path.exists('model.pkl') or not os.path.exists('feature_columns.pkl'):
+        print("Model files not found. Training model...")
+        try:
+            # Run the training script
+            result = subprocess.run([sys.executable, 'train_model.py'], 
+                                  capture_output=True, text=True, timeout=300)
+            if result.returncode == 0:
+                print("✓ Model trained successfully")
+                return True
+            else:
+                print(f"❌ Model training failed: {result.stderr}")
+                return False
+        except Exception as e:
+            print(f"❌ Error training model: {e}")
+            return False
+    return True
+
 def load_model_and_data():
     """Load the trained model and data"""
     global model, feature_columns, df
     
     try:
+        # First, ensure model exists
+        if not train_model_if_needed():
+            return False
+        
         # Load the trained model
         model = joblib.load('model.pkl')
         print("✓ Model loaded successfully")
@@ -40,7 +65,9 @@ def load_model_and_data():
         return True
     except FileNotFoundError as e:
         print(f"ERROR: Could not load model or data: {e}")
-        print("Make sure to run train_model.py first!")
+        return False
+    except Exception as e:
+        print(f"ERROR: Unexpected error loading model: {e}")
         return False
 
 @app.route('/')
@@ -52,7 +79,8 @@ def home():
             "/": "This info page",
             "/predict": "POST - Predict match winner",
             "/stats": "GET - Get match statistics",
-            "/dashboard": "GET - Get dashboard data"
+            "/dashboard": "GET - Get dashboard data",
+            "/health": "GET - Health check"
         },
         "author": "CS 301 Student",
         "project": "Beach Volleyball Analytics",
@@ -64,7 +92,7 @@ def predict_match():
     """Predict which team will win based on stats"""
     
     if model is None:
-        return jsonify({"error": "Model not loaded. Run train_model.py first!"}), 500
+        return jsonify({"error": "Model not loaded. Please check server logs."}), 500
     
     try:
         # Get data from request
@@ -216,7 +244,8 @@ def health_check():
     return jsonify({
         "status": "healthy",
         "model_loaded": model is not None,
-        "data_loaded": df is not None
+        "data_loaded": df is not None,
+        "timestamp": datetime.now().isoformat()
     })
 
 @app.errorhandler(404)
@@ -227,23 +256,25 @@ def not_found(error):
 def internal_error(error):
     return jsonify({"error": "Internal server error"}), 500
 
+# Initialize the app
+print("=== Starting AVP Beach Volleyball API ===")
+print("Loading model and data...")
+
+if load_model_and_data():
+    print("✓ Everything loaded successfully!")
+    print("API is ready to serve requests")
+else:
+    print("❌ Failed to load model or data")
+    print("The API will start but some endpoints may not work")
+
+# For local development
 if __name__ == '__main__':
-    print("=== Starting AVP Beach Volleyball API ===")
-    print("Loading model and data...")
+    # Get port from environment variable (for deployment platforms)
+    port = int(os.environ.get('PORT', 5000))
     
-    if load_model_and_data():
-        print("✓ Everything loaded successfully!")
-        print("API is ready to serve requests")
-        
-        # Get port from environment variable (for deployment platforms)
-        port = int(os.environ.get('PORT', 5000))
-        
-        print(f"Frontend can connect to: http://localhost:{port}")
-        print("Press Ctrl+C to stop the server")
-        print()
-        
-        # Run the Flask app
-        app.run(debug=False, host='0.0.0.0', port=port)
-    else:
-        print("❌ Failed to load model or data")
-        print("Please run train_model.py first to create the model") 
+    print(f"Frontend can connect to: http://localhost:{port}")
+    print("Press Ctrl+C to stop the server")
+    print()
+    
+    # Run the Flask app
+    app.run(debug=False, host='0.0.0.0', port=port) 
