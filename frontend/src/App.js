@@ -346,78 +346,94 @@ function App() {
 
             {/* Volleyball Images Section */}
             <div style={{ marginBottom: '2rem' }}>
+              <h3 style={{ color: '#2c3e50', marginBottom: '1.5rem', textAlign: 'center' }}>Volleyball Memories</h3>
+              
+              {/* Simple Image Carousel */}
               <div style={{ 
-                display: 'grid', 
-                gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
-                gap: '1.5rem' 
+                maxWidth: '600px', 
+                margin: '0 auto', 
+                position: 'relative',
+                background: 'white',
+                borderRadius: '15px',
+                padding: '1rem',
+                boxShadow: '0 5px 20px rgba(0, 0, 0, 0.1)'
               }}>
+                <img 
+                  src="https://via.placeholder.com/600x400/667eea/ffffff?text=Mo_Volley1.JPG" 
+                  alt="Volleyball Image 1" 
+                  style={{ 
+                    width: '100%', 
+                    height: '300px', 
+                    objectFit: 'cover', 
+                    borderRadius: '10px',
+                    display: 'block'
+                  }}
+                />
                 <div style={{ 
-                  background: 'white', 
-                  padding: '1rem', 
-                  borderRadius: '15px', 
-                  boxShadow: '0 5px 20px rgba(0, 0, 0, 0.1)',
-                  textAlign: 'center'
+                  textAlign: 'center', 
+                  marginTop: '1rem',
+                  color: '#666',
+                  fontSize: '0.9rem'
                 }}>
-                  <img 
-                    src={process.env.PUBLIC_URL + '/images/Mo_Volley1.JPG'} 
-                    alt="Beach Volleyball Action" 
-                    style={{ 
-                      width: '100%', 
-                      height: '200px', 
-                      objectFit: 'cover', 
-                      borderRadius: '10px'
-                    }}
-                    onLoad={() => console.log('Image 1 loaded successfully')}
-                    onError={(e) => {
-                      console.error('Failed to load image 1:', e.target.src);
-                    }}
-                  />
+                  Your volleyball memories will display here
                 </div>
-                
-                <div style={{ 
-                  background: 'white', 
-                  padding: '1rem', 
-                  borderRadius: '15px', 
-                  boxShadow: '0 5px 20px rgba(0, 0, 0, 0.1)',
-                  textAlign: 'center'
-                }}>
-                  <img 
-                    src={process.env.PUBLIC_URL + '/images/Mo_Volley2.jpg'} 
-                    alt="Team Competition" 
+              </div>
+              
+              {/* Alternative: Direct image links for testing */}
+              <div style={{ 
+                marginTop: '2rem', 
+                textAlign: 'center',
+                padding: '1rem',
+                background: '#f8f9fa',
+                borderRadius: '10px'
+              }}>
+                <p style={{ color: '#666', marginBottom: '1rem' }}>Image Test Links:</p>
+                <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+                  <a 
+                    href="/images/Mo_Volley1.JPG" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
                     style={{ 
-                      width: '100%', 
-                      height: '200px', 
-                      objectFit: 'cover', 
-                      borderRadius: '10px'
+                      padding: '0.5rem 1rem', 
+                      background: '#3498db', 
+                      color: 'white', 
+                      textDecoration: 'none', 
+                      borderRadius: '5px',
+                      fontSize: '0.9rem'
                     }}
-                    onLoad={() => console.log('Image 2 loaded successfully')}
-                    onError={(e) => {
-                      console.error('Failed to load image 2:', e.target.src);
-                    }}
-                  />
-                </div>
-                
-                <div style={{ 
-                  background: 'white', 
-                  padding: '1rem', 
-                  borderRadius: '15px', 
-                  boxShadow: '0 5px 20px rgba(0, 0, 0, 0.1)',
-                  textAlign: 'center'
-                }}>
-                  <img 
-                    src={process.env.PUBLIC_URL + '/images/Mo_Volley3.jpg'} 
-                    alt="Volleyball Passion" 
+                  >
+                    Test Image 1
+                  </a>
+                  <a 
+                    href="/images/Mo_Volley2.jpg" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
                     style={{ 
-                      width: '100%', 
-                      height: '200px', 
-                      objectFit: 'cover', 
-                      borderRadius: '10px'
+                      padding: '0.5rem 1rem', 
+                      background: '#3498db', 
+                      color: 'white', 
+                      textDecoration: 'none', 
+                      borderRadius: '5px',
+                      fontSize: '0.9rem'
                     }}
-                    onLoad={() => console.log('Image 3 loaded successfully')}
-                    onError={(e) => {
-                      console.error('Failed to load image 3:', e.target.src);
+                  >
+                    Test Image 2
+                  </a>
+                  <a 
+                    href="/images/Mo_Volley3.jpg" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    style={{ 
+                      padding: '0.5rem 1rem', 
+                      background: '#3498db', 
+                      color: 'white', 
+                      textDecoration: 'none', 
+                      borderRadius: '5px',
+                      fontSize: '0.9rem'
                     }}
-                  />
+                  >
+                    Test Image 3
+                  </a>
                 </div>
               </div>
             </div>
