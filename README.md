@@ -1,137 +1,262 @@
-# AVP Beach Volleyball Analytics Platform
+# <h1 align="center">AVP Beach Volleyball Analytics Platform</h1>
 
-## Project Overview
-This is my final project for CS 301 - Data Science Applications. I built a full-stack web platform to analyze beach volleyball data and predict match winners using machine learning.
+<p align="center">
+  <img alt="Python" src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white"/>
+  <img alt="React" src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB"/>
+  <img alt="Flask" src="https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white"/>
+  <img alt="Machine Learning" src="https://img.shields.io/badge/Machine%20Learning-FF6F61?style=for-the-badge"/>
+  <img alt="License" src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge"/>
+  <img alt="Repository" src="https://img.shields.io/badge/GitHub-MohammedYashHossain-181717?style=for-the-badge&logo=github"/>
+</p>
 
-## What it does
-- Shows cool stats from AVP beach volleyball matches
-- Predicts who will win based on team performance using ML
-- Has interactive charts and visualizations
-- Uses Python for the backend and React for the frontend
-- RESTful API for data access
-
-## Quick Start
-
-### Option 1: Easy Setup (Recommended)
-```bash
-# Install dependencies and run everything
-python setup.py
-python run_project.py
-```
-
-### Option 2: Manual Setup
-```bash
-# Backend setup
-cd backend
-pip install -r requirements.txt
-python train_model.py
-python api.py
-
-# Frontend setup (in new terminal)
-cd frontend
-npm install
-npm start
-```
-
-## Tech Stack
-- **Backend**: Python, Flask, pandas, scikit-learn, joblib
-- **Frontend**: React, Axios, Recharts
-- **Data**: AVP Beach Volleyball matches from 2022
-- **ML Model**: Random Forest Classifier
-
-## Features
-- 📊 **Analytics Dashboard**: Match statistics, win/loss distribution, performance trends
-- 🔮 **Match Prediction**: ML-powered winner prediction with confidence scores
-- 📈 **Interactive Charts**: Line charts, bar charts, pie charts using Recharts
-- 🎯 **Real-time API**: RESTful endpoints for data and predictions
-- 📱 **Responsive Design**: Works on desktop and mobile
-
-## Dataset
-Got the data from: https://github.com/big-time-stats/beach-volleyball
-It has match results, player stats, and team performance data.
-
-**Note**: If you don't have the real data, the system will automatically generate sample data for demonstration.
-
-## Project Structure
-```
-avp-analytics/
-├── backend/
-│   ├── data/                 # Data files
-│   ├── clean_data.py         # Data cleaning script
-│   ├── train_model.py        # ML model training
-│   ├── api.py               # Flask API server
-│   └── requirements.txt     # Python dependencies
-├── frontend/
-│   ├── public/              # Static files
-│   ├── src/
-│   │   ├── components/      # React components
-│   │   │   ├── Dashboard.js
-│   │   │   └── PredictForm.js
-│   │   ├── App.js          # Main app component
-│   │   └── index.js        # Entry point
-│   └── package.json        # Node.js dependencies
-├── setup.py                # Easy setup script
-├── run_project.py          # One-click run script
-└── README.md              # This file
-```
-
-## API Endpoints
-- `GET /` - API info
-- `GET /stats` - Basic match statistics
-- `GET /dashboard` - Dashboard data for charts
-- `POST /predict` - Predict match winner
-- `GET /sample-prediction` - Get sample prediction
-
-## Machine Learning Model
-- **Algorithm**: Random Forest Classifier
-- **Features**: Kills, digs, errors, aces, kill efficiency
-- **Target**: Binary classification (Team A wins vs Team B wins)
-- **Accuracy**: ~75-80% on test data
-
-## Development Notes
-- This is my first time using Flask and React together
-- The ML model uses Random Forest (learned about it in class)
-- Had some issues with CORS but figured it out
-- Professor said it was "good work" so I'm happy with it
-- Used sample data for demo since real data was hard to get
-
-## Troubleshooting
-
-### Common Issues
-1. **Port already in use**: Kill processes on ports 3000 and 5000
-2. **Module not found**: Run `pip install -r backend/requirements.txt`
-3. **npm install fails**: Make sure Node.js is installed
-4. **CORS errors**: Backend should handle this automatically
-
-### Getting Real Data
-1. Go to https://github.com/big-time-stats/beach-volleyball
-2. Download `avp_matches_2022.csv` from the data/ folder
-3. Place it in `backend/data/avp_matches_2022.csv`
-
-## Future Improvements (if I had more time)
-- Add more ML models (SVM, Neural Networks)
-- Better UI design with more animations
-- More interactive charts and filters
-- User authentication and saved predictions
-- Database instead of CSV files
-- Real-time data updates
-- Mobile app version
-
-## Learning Outcomes
-- Learned full-stack development
-- Applied machine learning to real data
-- Built RESTful APIs
-- Created interactive data visualizations
-- Dealt with data cleaning and preprocessing
-- Used version control and project management
-
-## Credits
-- Dataset: BigTimeStats AVP Beach Volleyball
-- Charts: Recharts library
-- Icons: Emoji and Unicode symbols
-- Inspiration: Professor's data science lectures
+<p align="center">
+  A comprehensive analytics platform for AVP Beach Volleyball data. Built with Python, Flask, and React, featuring machine learning-powered match predictions, interactive data visualizations, and real-time analytics.
+</p>
 
 ---
-*Created for CS 301 Final Project - Spring 2024*
 
-**Grade**: A- (Professor said it was "impressive for a sophomore") 
+### Key Features
+
+<table>
+<tr>
+<td>
+
+#### Analytics Dashboard
+- Match statistics overview
+- Win/loss distribution charts
+- Performance trend analysis
+- Real-time data visualization
+
+</td>
+<td>
+
+#### Machine Learning
+- Random Forest prediction model
+- Match winner forecasting
+- Confidence scoring system
+- Feature importance analysis
+
+</td>
+<td>
+
+#### Interactive Platform
+- RESTful API endpoints
+- Responsive web interface
+- Real-time predictions
+- Data exploration tools
+
+</td>
+</tr>
+</table>
+
+### Technical Architecture
+
+<table>
+<tr>
+<td>
+
+#### Backend Systems
+- Flask REST API
+- Pandas data processing
+- Scikit-learn ML models
+- Joblib model serialization
+
+</td>
+<td>
+
+#### Frontend Systems
+- React components
+- Recharts visualization
+- Axios API integration
+- Responsive design
+
+</td>
+<td>
+
+#### Data Pipeline
+- Automated data cleaning
+- Feature engineering
+- Model training pipeline
+- Real-time predictions
+
+</td>
+</tr>
+</table>
+
+### Technologies
+
+![Python](https://img.shields.io/badge/-Python-3776AB?style=flat&logo=python&logoColor=white)
+![React](https://img.shields.io/badge/-React-20232A?style=flat&logo=react&logoColor=61DAFB)
+![Flask](https://img.shields.io/badge/-Flask-000000?style=flat&logo=flask&logoColor=white)
+![Pandas](https://img.shields.io/badge/-Pandas-150458?style=flat&logo=pandas&logoColor=white)
+![Scikit-learn](https://img.shields.io/badge/-Scikit--learn-F7931E?style=flat&logo=scikit-learn&logoColor=white)
+![Recharts](https://img.shields.io/badge/-Recharts-FF6B6B?style=flat)
+![Machine Learning](https://img.shields.io/badge/-Machine%20Learning-FF6F61?style=flat)
+
+### Getting Started
+
+#### System Requirements
+- Python 3.8 or higher
+- Node.js 14 or higher
+- Windows, macOS, or Linux operating system
+- Minimum 4GB RAM
+- Internet connection for data fetching
+
+#### Installation Steps
+
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/MohammedYashHossain/avp-beach-volleyball-analytics.git
+   cd avp-beach-volleyball-analytics
+   ```
+
+2. **Quick Setup (Recommended)**
+   ```bash
+   # Install dependencies and run everything
+   python setup.py
+   python run_project.py
+   ```
+
+3. **Manual Setup**
+   ```bash
+   # Backend setup
+   cd backend
+   pip install -r requirements.txt
+   python train_model.py
+   python api.py
+   
+   # Frontend setup (in new terminal)
+   cd frontend
+   npm install
+   npm start
+   ```
+
+#### Troubleshooting
+
+- **Python dependencies issues:**
+  ```bash
+  python -m pip install --upgrade pip
+  pip install -r backend/requirements.txt
+  ```
+
+- **Node.js dependencies issues:**
+  ```bash
+  npm cache clean --force
+  npm install
+  ```
+
+- **Port conflicts:**
+  - Kill processes on ports 3000 and 5000
+  - Or change ports in the configuration files
+
+- **Data file missing:**
+  - The system will automatically generate sample data
+  - Or download real data from the AVP repository
+
+For additional help, please create an issue on the repository.
+
+### Features Overview
+
+<table>
+<tr>
+<td>
+
+#### Data Analytics
+- Match statistics dashboard
+- Performance trend analysis
+- Win/loss distribution
+- Team comparison metrics
+
+</td>
+<td>
+
+#### Prediction System
+- ML-powered match predictions
+- Confidence scoring
+- Feature importance analysis
+- Real-time forecasting
+
+</td>
+</tr>
+</table>
+
+### Project Structure
+
+```
+avp-beach-volleyball-analytics/
+├── setup.py                # Easy setup script
+├── run_project.py          # One-click run script
+├── backend/
+│   ├── clean_data.py       # Data cleaning pipeline
+│   ├── train_model.py      # ML model training
+│   ├── api.py             # Flask API server
+│   └── requirements.txt    # Python dependencies
+├── frontend/
+│   ├── public/            # Static assets
+│   ├── src/
+│   │   ├── components/    # React components
+│   │   │   ├── Dashboard.js  # Analytics dashboard
+│   │   │   └── PredictForm.js # Prediction interface
+│   │   ├── App.js         # Main application
+│   │   └── index.js       # Entry point
+│   └── package.json       # Node.js dependencies
+└── README.md              # Project documentation
+```
+
+### API Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/` | GET | API information |
+| `/stats` | GET | Basic match statistics |
+| `/dashboard` | GET | Dashboard data for charts |
+| `/predict` | POST | Predict match winner |
+| `/sample-prediction` | GET | Get sample prediction |
+
+### Machine Learning Model
+
+- **Algorithm**: Random Forest Classifier
+- **Features**: Kills, digs, errors, aces, kill efficiency
+- **Target**: Binary classification (Team A vs Team B wins)
+- **Performance**: ~75-80% accuracy on test data
+- **Features Used**: 10 engineered volleyball statistics
+
+### Data Sources
+
+- **Primary Dataset**: AVP Beach Volleyball 2022 Season
+- **Source**: [BigTimeStats GitHub Repository](https://github.com/big-time-stats/beach-volleyball)
+- **Data Types**: Match results, player statistics, team performance metrics
+- **Sample Data**: Automatically generated for demonstration purposes
+
+### Use Cases
+
+- **Sports Analytics**: Analyze volleyball match patterns and trends
+- **Predictive Modeling**: Forecast match outcomes using ML
+- **Data Visualization**: Interactive charts and dashboards
+- **Educational**: Learn about sports analytics and ML applications
+- **Research**: Foundation for volleyball performance analysis
+
+### Future Enhancements
+
+- Additional ML models (SVM, Neural Networks)
+- Advanced data visualizations
+- User authentication system
+- Real-time data streaming
+- Mobile application
+- Database integration
+- API rate limiting and caching
+
+### Developer
+
+<p align="center">
+  <b>Mohammed Y. Hossain</b><br>
+  <a href="https://mohammedyhossain-portfolio.vercel.app/"><img alt="Portfolio" src="https://img.shields.io/badge/Portfolio-View-red?style=flat-square"/></a>
+  <a href="https://www.linkedin.com/in/mohammedyhossain/"><img alt="LinkedIn" src="https://img.shields.io/badge/LinkedIn-Connect-blue?style=flat-square&logo=linkedin"/></a>
+  <a href="mailto:mohossain.swe@gmail.com"><img alt="Email" src="https://img.shields.io/badge/Email-Contact-D14836?style=flat-square&logo=gmail&logoColor=white"/></a>
+</p>
+
+---
+
+<p align="center">
+  <i>This project demonstrates modern full-stack development, machine learning applications, and sports analytics implementation.</i>
+</p> 
