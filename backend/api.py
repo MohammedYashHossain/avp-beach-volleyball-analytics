@@ -12,48 +12,51 @@ import random
 
 app = Flask(__name__)
 
-# Configure CORS more comprehensively
-CORS(app, resources={
-    r"/*": {
-        "origins": ["*"],
-        "methods": ["GET", "POST", "OPTIONS"],
-        "allow_headers": ["Content-Type", "Authorization"]
-    }
-})
-
-# Add CORS headers to all responses
-@app.after_request
-def after_request(response):
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
-    return response
+# Configure CORS
+CORS(app)
 
 # Load the trained model
-model_path = os.path.join(os.path.dirname(__file__), 'model.pkl')
 model = None
 try:
+    model_path = os.path.join(os.path.dirname(__file__), 'model.pkl')
     if os.path.exists(model_path):
         model = joblib.load(model_path)
         print("✅ Model loaded successfully")
     else:
-        print("⚠️  Model file not found. Will train model on first request.")
+        print("⚠️  Model file not found")
 except Exception as e:
-    print(f"⚠️  Error loading model: {e}. Will train model on first request.")
-    model = None
+    print(f"⚠️  Error loading model: {e}")
 
-# Load or create sample data
-data_path = os.path.join(os.path.dirname(__file__), 'data', 'volleyball_data.csv')
+# Load data
 df = None
 try:
+    data_path = os.path.join(os.path.dirname(__file__), 'data', 'volleyball_data.csv')
     if os.path.exists(data_path):
         df = pd.read_csv(data_path)
         print("✅ Data loaded successfully")
     else:
-        print("⚠️  Data file not found. Will use sample data.")
+        print("⚠️  Data file not found")
 except Exception as e:
-    print(f"⚠️  Error loading data: {e}. Will use sample data.")
-    df = None
+    print(f"⚠️  Error loading data: {e}")
+
+@app.route('/')
+def home():
+    """API information endpoint"""
+    return jsonify({
+        "message": "AVP Beach Volleyball Analytics API",
+        "description": "Professional sports analytics platform with machine learning capabilities",
+        "version": "1.0.0",
+        "status": "running",
+        "endpoints": {
+            "/": "API information",
+            "/health": "Health check",
+            "/test": "Test endpoint",
+            "/stats": "Basic match statistics",
+            "/dashboard": "Dashboard data for visualizations",
+            "/predict": "Predict match winner (POST)",
+            "/sample-prediction": "Get sample prediction"
+        }
+    })
 
 @app.route('/test')
 def test():
@@ -70,31 +73,9 @@ def health_check():
     return jsonify({
         "status": "healthy",
         "message": "AVP Beach Volleyball Analytics API is running",
-        "timestamp": datetime.now().isoformat()
-    })
-
-@app.route('/')
-def home():
-    """API information endpoint"""
-    return jsonify({
-        "message": "AVP Beach Volleyball Analytics API",
-        "description": "Professional sports analytics platform with machine learning capabilities",
-        "version": "1.0.0",
-        "endpoints": {
-            "/": "API information",
-            "/health": "Health check",
-            "/stats": "Basic match statistics",
-            "/dashboard": "Dashboard data for visualizations",
-            "/predict": "Predict match winner (POST)",
-            "/sample-prediction": "Get sample prediction"
-        },
-        "author": "Professional Analytics Platform",
-        "features": [
-            "Advanced data analytics",
-            "Machine learning predictions",
-            "Real-time statistics",
-            "Interactive visualizations"
-        ]
+        "timestamp": datetime.now().isoformat(),
+        "model_loaded": model is not None,
+        "data_loaded": df is not None
     })
 
 @app.route('/stats')
