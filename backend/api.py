@@ -1,165 +1,256 @@
-# AVP Beach Volleyball Analytics Platform - Web API
-# Professional sports analytics API with machine learning capabilities
+# AVP Beach Volleyball Analytics Platform - ARIMA Time Series Forecasting
+# Professional sports analytics API with ARIMA forecasting capabilities
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import pandas as pd
-import joblib
 import numpy as np
 import os
 from datetime import datetime, timedelta
 import random
+import json
+import base64
+import io
+from statsmodels.tsa.arima.model import ARIMA
+from statsmodels.tsa.stattools import adfuller
+from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
+import matplotlib.pyplot as plt
+import seaborn as sns
+import plotly.graph_objects as go
+import plotly.express as px
+from plotly.subplots import make_subplots
 
 app = Flask(__name__)
 CORS(app)
 
 # Global variables
-model = None
 df = None
+arima_models = {}
+forecast_data = {}
 
-def create_sample_data():
-    """Create realistic volleyball data for ML training"""
+def create_time_series_data():
+    """Create realistic volleyball time series data for ARIMA analysis"""
     np.random.seed(42)
-    n_samples = 200
+    n_days = 365  # One year of daily data
     
-    # Generate realistic volleyball statistics
+    # Generate base trends with seasonality
+    dates = pd.date_range('2023-01-01', periods=n_days, freq='D')
+    
+    # Create realistic volleyball performance trends
+    base_kills = 20
+    seasonal_pattern = 5 * np.sin(2 * np.pi * np.arange(n_days) / 365)  # Yearly seasonality
+    weekly_pattern = 2 * np.sin(2 * np.pi * np.arange(n_days) / 7)      # Weekly pattern
+    trend = 0.02 * np.arange(n_days)  # Slight upward trend
+    noise = np.random.normal(0, 2, n_days)
+    
+    # Team A performance (improving over time)
+    team_a_kills = base_kills + seasonal_pattern + weekly_pattern + trend + noise
+    team_a_kills = np.maximum(team_a_kills, 5)  # Minimum 5 kills
+    
+    # Team B performance (more volatile)
+    team_b_kills = base_kills + seasonal_pattern + weekly_pattern + 0.5 * trend + 1.5 * noise
+    team_b_kills = np.maximum(team_b_kills, 5)
+    
+    # Create efficiency trends
+    team_a_efficiency = 0.7 + 0.1 * np.sin(2 * np.pi * np.arange(n_days) / 30) + 0.01 * trend + 0.05 * np.random.normal(0, 1, n_days)
+    team_a_efficiency = np.clip(team_a_efficiency, 0.3, 0.95)
+    
+    team_b_efficiency = 0.65 + 0.08 * np.sin(2 * np.pi * np.arange(n_days) / 30) + 0.005 * trend + 0.08 * np.random.normal(0, 1, n_days)
+    team_b_efficiency = np.clip(team_b_efficiency, 0.3, 0.95)
+    
+    # Create match results
+    team_a_wins = []
+    for i in range(n_days):
+        # Win probability based on performance
+        win_prob = team_a_efficiency[i] / (team_a_efficiency[i] + team_b_efficiency[i])
+        team_a_wins.append(np.random.binomial(1, win_prob))
+    
+    # Create DataFrame
     data = {
-        'match_date': pd.date_range('2024-01-01', periods=n_samples).strftime('%Y-%m-%d'),
-        'team_a_total_kills': np.random.randint(10, 30, n_samples),
-        'team_a_total_digs': np.random.randint(15, 35, n_samples),
-        'team_a_total_errors': np.random.randint(2, 12, n_samples),
-        'team_a_total_aces': np.random.randint(0, 6, n_samples),
-        'team_b_total_kills': np.random.randint(10, 30, n_samples),
-        'team_b_total_digs': np.random.randint(15, 35, n_samples),
-        'team_b_total_errors': np.random.randint(2, 12, n_samples),
-        'team_b_total_aces': np.random.randint(0, 6, n_samples),
-        'team_a_kill_efficiency': np.random.uniform(0.5, 0.9, n_samples),
-        'team_b_kill_efficiency': np.random.uniform(0.5, 0.9, n_samples)
+        'date': dates,
+        'team_a_kills': np.round(team_a_kills, 1),
+        'team_b_kills': np.round(team_b_kills, 1),
+        'team_a_efficiency': np.round(team_a_efficiency, 3),
+        'team_b_efficiency': np.round(team_b_efficiency, 3),
+        'team_a_wins': team_a_wins,
+        'total_kills': np.round(team_a_kills + team_b_kills, 1),
+        'kill_difference': np.round(team_a_kills - team_b_kills, 1)
     }
     
     df = pd.DataFrame(data)
-    
-    # Create target variable (winner) based on performance
-    df['team_a_score'] = (df['team_a_total_kills'] * 0.4 + 
-                         df['team_a_total_aces'] * 0.3 + 
-                         df['team_a_kill_efficiency'] * 20 - 
-                         df['team_a_total_errors'] * 0.2)
-    
-    df['team_b_score'] = (df['team_b_total_kills'] * 0.4 + 
-                         df['team_b_total_aces'] * 0.3 + 
-                         df['team_b_kill_efficiency'] * 20 - 
-                         df['team_b_total_errors'] * 0.2)
-    
-    # Add some randomness to make it more realistic
-    df['team_a_score'] += np.random.normal(0, 2, n_samples)
-    df['team_b_score'] += np.random.normal(0, 2, n_samples)
-    
-    # Determine winner
-    df['winner'] = np.where(df['team_a_score'] > df['team_b_score'], 'Team A', 'Team B')
-    df['winner_binary'] = np.where(df['winner'] == 'Team A', 1, 0)
+    df.set_index('date', inplace=True)
     
     return df
 
-def train_ml_model(df):
-    """Train a Random Forest model on the volleyball data"""
-    from sklearn.ensemble import RandomForestClassifier
-    from sklearn.model_selection import train_test_split
-    
-    # Prepare features
-    feature_columns = [
-        'team_a_total_kills', 'team_a_total_digs', 'team_a_total_errors', 'team_a_total_aces',
-        'team_b_total_kills', 'team_b_total_digs', 'team_b_total_errors', 'team_b_total_aces',
-        'team_a_kill_efficiency', 'team_b_kill_efficiency'
-    ]
-    
-    X = df[feature_columns]
-    y = df['winner_binary']
-    
-    # Split data
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=42, stratify=y
-    )
-    
-    # Create and train model
-    model = RandomForestClassifier(
-        n_estimators=100,
-        max_depth=10,
-        random_state=42,
-        n_jobs=-1
-    )
-    
-    model.fit(X_train, y_train)
-    
-    # Evaluate model
-    from sklearn.metrics import accuracy_score
-    y_pred = model.predict(X_test)
-    accuracy = accuracy_score(y_test, y_pred)
-    
-    print(f"✅ ML Model trained successfully!")
-    print(f"📈 Model Accuracy: {accuracy:.3f} ({accuracy*100:.1f}%)")
-    
-    return model
+def check_stationarity(timeseries):
+    """Check if time series is stationary using Augmented Dickey-Fuller test"""
+    result = adfuller(timeseries.dropna())
+    return {
+        'adf_statistic': result[0],
+        'p_value': result[1],
+        'critical_values': result[4],
+        'is_stationary': result[1] < 0.05
+    }
 
-def initialize_ml_system():
-    """Initialize the ML system with data and model"""
-    global model, df
+def fit_arima_model(timeseries, order=(1, 1, 1)):
+    """Fit ARIMA model to time series data"""
+    try:
+        # Remove NaN values
+        clean_series = timeseries.dropna()
+        
+        if len(clean_series) < 10:
+            return None, "Insufficient data for ARIMA modeling"
+        
+        # Fit ARIMA model
+        model = ARIMA(clean_series, order=order)
+        fitted_model = model.fit()
+        
+        return fitted_model, None
+    except Exception as e:
+        return None, str(e)
+
+def generate_forecast(model, steps=30):
+    """Generate forecast using fitted ARIMA model"""
+    try:
+        forecast = model.forecast(steps=steps)
+        conf_int = model.get_forecast(steps=steps).conf_int()
+        
+        return {
+            'forecast': forecast.tolist(),
+            'lower_ci': conf_int.iloc[:, 0].tolist(),
+            'upper_ci': conf_int.iloc[:, 1].tolist(),
+            'dates': pd.date_range(start=model.data.dates[-1] + timedelta(days=1), periods=steps, freq='D').strftime('%Y-%m-%d').tolist()
+        }
+    except Exception as e:
+        return None
+
+def create_visualization(series_name, data, forecast_data=None, title="Time Series Analysis"):
+    """Create interactive Plotly visualization"""
+    fig = go.Figure()
+    
+    # Historical data
+    fig.add_trace(go.Scatter(
+        x=data.index,
+        y=data.values,
+        mode='lines+markers',
+        name='Historical Data',
+        line=dict(color='#1f77b4', width=2),
+        marker=dict(size=4)
+    ))
+    
+    # Forecast if available
+    if forecast_data:
+        fig.add_trace(go.Scatter(
+            x=forecast_data['dates'],
+            y=forecast_data['forecast'],
+            mode='lines+markers',
+            name='Forecast',
+            line=dict(color='#ff7f0e', width=2, dash='dash'),
+            marker=dict(size=4)
+        ))
+        
+        # Confidence intervals
+        fig.add_trace(go.Scatter(
+            x=forecast_data['dates'] + forecast_data['dates'][::-1],
+            y=forecast_data['upper_ci'] + forecast_data['lower_ci'][::-1],
+            fill='toself',
+            fillcolor='rgba(255, 127, 14, 0.2)',
+            line=dict(color='rgba(255, 127, 14, 0)'),
+            name='Confidence Interval',
+            showlegend=False
+        ))
+    
+    fig.update_layout(
+        title=title,
+        xaxis_title='Date',
+        yaxis_title=series_name,
+        template='plotly_white',
+        height=500,
+        showlegend=True
+    )
+    
+    return fig.to_json()
+
+def initialize_arima_system():
+    """Initialize the ARIMA analytics system"""
+    global df, arima_models, forecast_data
     
     try:
         # Create data directory if it doesn't exist
         os.makedirs('data', exist_ok=True)
         
-        # Create or load data
-        data_path = os.path.join('data', 'volleyball_data.csv')
+        # Create or load time series data
+        data_path = os.path.join('data', 'volleyball_timeseries.csv')
         if not os.path.exists(data_path):
-            print("📊 Creating ML training data...")
-            df = create_sample_data()
-            df.to_csv(data_path, index=False)
-            print("✅ ML training data created successfully")
+            print("📊 Creating ARIMA time series data...")
+            df = create_time_series_data()
+            df.to_csv(data_path)
+            print("✅ ARIMA time series data created successfully")
         else:
-            df = pd.read_csv(data_path)
-            print("✅ ML training data loaded successfully")
+            df = pd.read_csv(data_path, index_col='date', parse_dates=True)
+            print("✅ ARIMA time series data loaded successfully")
         
-        # Create or load model
-        model_path = os.path.join('model.pkl')
-        if not os.path.exists(model_path):
-            print("🤖 Training ML model...")
-            model = train_ml_model(df)
-            joblib.dump(model, model_path)
-            print("✅ ML model trained and saved successfully")
-        else:
-            model = joblib.load(model_path)
-            print("✅ ML model loaded successfully")
-            
+        # Fit ARIMA models for different metrics
+        print("🤖 Training ARIMA models...")
+        
+        metrics = {
+            'team_a_kills': (2, 1, 2),
+            'team_b_kills': (2, 1, 2),
+            'team_a_efficiency': (1, 1, 1),
+            'team_b_efficiency': (1, 1, 1),
+            'total_kills': (2, 1, 2),
+            'kill_difference': (1, 1, 1)
+        }
+        
+        for metric, order in metrics.items():
+            if metric in df.columns:
+                model, error = fit_arima_model(df[metric], order)
+                if model:
+                    arima_models[metric] = model
+                    print(f"✅ ARIMA model trained for {metric}")
+                else:
+                    print(f"⚠️  Failed to train ARIMA model for {metric}: {error}")
+        
+        # Generate forecasts
+        print("🔮 Generating forecasts...")
+        for metric, model in arima_models.items():
+            forecast = generate_forecast(model, steps=30)
+            if forecast:
+                forecast_data[metric] = forecast
+                print(f"✅ Forecast generated for {metric}")
+        
+        print("✅ ARIMA analytics system initialized successfully!")
+        
     except Exception as e:
-        print(f"⚠️  Error initializing ML system: {e}")
-        # Create fallback data and model
-        df = create_sample_data()
-        model = train_ml_model(df)
+        print(f"⚠️  Error initializing ARIMA system: {e}")
+        # Create fallback data
+        df = create_time_series_data()
 
-# Initialize ML system on startup
-print("🚀 Initializing AVP Beach Volleyball Analytics ML System...")
-initialize_ml_system()
-print("✅ ML System initialized successfully!")
+# Initialize ARIMA system on startup
+print("🚀 Initializing AVP Beach Volleyball ARIMA Analytics System...")
+initialize_arima_system()
+print("✅ ARIMA Analytics System initialized successfully!")
 
 @app.route('/')
 def home():
     """API information endpoint"""
     return jsonify({
         "message": "AVP Beach Volleyball Analytics API",
-        "description": "Professional sports analytics platform with machine learning capabilities",
-        "version": "1.0.0",
+        "description": "Professional sports analytics platform with ARIMA time series forecasting",
+        "version": "2.0.0",
         "status": "running",
-        "ml_model": "Random Forest Classifier",
-        "model_accuracy": "80%+",
-        "features": "10 volleyball performance metrics",
+        "analytics_engine": "ARIMA Time Series Forecasting",
+        "forecast_horizon": "30 days",
+        "metrics_analyzed": list(arima_models.keys()),
         "endpoints": {
             "/": "API information",
             "/health": "Health check",
             "/test": "Test endpoint",
-            "/stats": "Basic match statistics",
-            "/dashboard": "Dashboard data for visualizations",
-            "/predict": "Predict match winner (POST)",
-            "/sample-prediction": "Get sample prediction"
+            "/timeseries": "Get time series data",
+            "/forecast": "Get ARIMA forecasts",
+            "/visualization": "Get interactive visualizations",
+            "/stationarity": "Check time series stationarity",
+            "/dashboard": "Dashboard with forecasts"
         }
     })
 
@@ -167,11 +258,12 @@ def home():
 def test():
     """Simple test endpoint"""
     return jsonify({
-        "message": "Backend is working!",
+        "message": "ARIMA Backend is working!",
         "timestamp": datetime.now().isoformat(),
         "status": "success",
-        "ml_model_loaded": model is not None,
-        "data_loaded": df is not None
+        "arima_models_loaded": len(arima_models),
+        "data_loaded": df is not None,
+        "forecasts_available": len(forecast_data)
     })
 
 @app.route('/health')
@@ -179,172 +271,203 @@ def health_check():
     """Health check endpoint for Railway"""
     return jsonify({
         "status": "healthy",
-        "message": "AVP Beach Volleyball Analytics API is running",
+        "message": "AVP Beach Volleyball ARIMA Analytics API is running",
         "timestamp": datetime.now().isoformat(),
-        "ml_model_loaded": model is not None,
-        "data_loaded": df is not None
+        "arima_models_loaded": len(arima_models),
+        "data_loaded": df is not None,
+        "forecasts_available": len(forecast_data)
     })
 
-@app.route('/stats')
-def get_stats():
-    """Get basic match statistics"""
+@app.route('/timeseries')
+def get_timeseries():
+    """Get time series data"""
     if df is None:
-        return jsonify({"error": "Data not available"}), 500
+        return jsonify({"error": "Time series data not available"}), 500
     
-    # Calculate real stats from ML training data
-    total_matches = len(df)
-    team_a_wins = len(df[df['winner'] == 'Team A'])
-    team_b_wins = len(df[df['winner'] == 'Team B'])
+    # Return last 100 data points for each metric
+    recent_data = df.tail(100).reset_index()
+    recent_data['date'] = recent_data['date'].dt.strftime('%Y-%m-%d')
     
     return jsonify({
-        "total_matches": total_matches,
-        "team_a_wins": team_a_wins,
-        "team_b_wins": team_b_wins,
-        "win_percentage": {
-            "team_a": round((team_a_wins / total_matches) * 100, 1),
-            "team_b": round((team_b_wins / total_matches) * 100, 1)
-        },
-        "average_stats": {
-            "team_a_kills": round(df['team_a_total_kills'].mean(), 1),
-            "team_b_kills": round(df['team_b_total_kills'].mean(), 1),
-            "team_a_digs": round(df['team_a_total_digs'].mean(), 1),
-            "team_b_digs": round(df['team_b_total_digs'].mean(), 1),
-            "team_a_errors": round(df['team_a_total_errors'].mean(), 1),
-            "team_b_errors": round(df['team_b_total_errors'].mean(), 1),
-            "team_a_aces": round(df['team_a_total_aces'].mean(), 1),
-            "team_b_aces": round(df['team_b_total_aces'].mean(), 1)
+        "timeseries_data": recent_data.to_dict('records'),
+        "metrics": list(df.columns),
+        "total_observations": len(df),
+        "date_range": {
+            "start": df.index.min().strftime('%Y-%m-%d'),
+            "end": df.index.max().strftime('%Y-%m-%d')
         }
     })
 
+@app.route('/forecast')
+def get_forecasts():
+    """Get ARIMA forecasts for all metrics"""
+    if not forecast_data:
+        return jsonify({"error": "Forecasts not available"}), 500
+    
+    return jsonify({
+        "forecasts": forecast_data,
+        "forecast_horizon": "30 days",
+        "models_used": list(arima_models.keys()),
+        "last_update": datetime.now().isoformat()
+    })
+
+@app.route('/visualization/<metric>')
+def get_visualization(metric):
+    """Get interactive visualization for a specific metric"""
+    if df is None or metric not in df.columns:
+        return jsonify({"error": f"Metric {metric} not available"}), 500
+    
+    try:
+        # Create visualization
+        title = f"ARIMA Analysis: {metric.replace('_', ' ').title()}"
+        forecast = forecast_data.get(metric)
+        
+        viz_data = create_visualization(metric, df[metric], forecast, title)
+        
+        return jsonify({
+            "visualization": viz_data,
+            "metric": metric,
+            "has_forecast": metric in forecast_data
+        })
+        
+    except Exception as e:
+        return jsonify({"error": f"Visualization failed: {str(e)}"}), 500
+
+@app.route('/stationarity/<metric>')
+def check_metric_stationarity(metric):
+    """Check stationarity of a specific metric"""
+    if df is None or metric not in df.columns:
+        return jsonify({"error": f"Metric {metric} not available"}), 500
+    
+    try:
+        stationarity_result = check_stationarity(df[metric])
+        
+        return jsonify({
+            "metric": metric,
+            "stationarity_test": stationarity_result,
+            "recommendation": "Use differencing" if not stationarity_result['is_stationary'] else "Series is stationary"
+        })
+        
+    except Exception as e:
+        return jsonify({"error": f"Stationarity test failed: {str(e)}"}), 500
+
 @app.route('/dashboard')
 def get_dashboard_data():
-    """Get data for dashboard visualizations"""
+    """Get comprehensive dashboard data with forecasts"""
     if df is None:
         return jsonify({"error": "Data not available"}), 500
     
-    # Generate real dashboard data from ML training data
-    efficiency_trend = []
-    for i in range(min(20, len(df))):
-        row = df.iloc[i]
-        efficiency_trend.append({
-            "match_number": i + 1,
-            "team_a_kill_efficiency": round(row['team_a_kill_efficiency'], 2),
-            "team_b_kill_efficiency": round(row['team_b_kill_efficiency'], 2)
+    try:
+        # Recent performance trends
+        recent_data = df.tail(30)
+        
+        # Calculate trends
+        trends = {}
+        for metric in ['team_a_kills', 'team_b_kills', 'team_a_efficiency', 'team_b_efficiency']:
+            if metric in df.columns:
+                slope = np.polyfit(range(len(recent_data)), recent_data[metric], 1)[0]
+                trends[metric] = {
+                    "slope": round(slope, 4),
+                    "trend": "increasing" if slope > 0 else "decreasing" if slope < 0 else "stable",
+                    "current_value": round(recent_data[metric].iloc[-1], 2),
+                    "average_value": round(recent_data[metric].mean(), 2)
+                }
+        
+        # Win rate analysis
+        if 'team_a_wins' in df.columns:
+            recent_wins = df.tail(30)['team_a_wins'].sum()
+            total_recent = len(df.tail(30))
+            win_rate = (recent_wins / total_recent) * 100
+            
+            overall_wins = df['team_a_wins'].sum()
+            overall_total = len(df)
+            overall_win_rate = (overall_wins / overall_total) * 100
+        else:
+            win_rate = 50.0
+            overall_win_rate = 50.0
+        
+        # Forecast summary
+        forecast_summary = {}
+        for metric, forecast in forecast_data.items():
+            if forecast:
+                current_val = df[metric].iloc[-1]
+                forecast_val = forecast['forecast'][-1]
+                change = ((forecast_val - current_val) / current_val) * 100
+                
+                forecast_summary[metric] = {
+                    "current_value": round(current_val, 2),
+                    "forecasted_value": round(forecast_val, 2),
+                    "percent_change": round(change, 2),
+                    "trend": "increasing" if change > 0 else "decreasing" if change < 0 else "stable"
+                }
+        
+        return jsonify({
+            "recent_trends": trends,
+            "win_analysis": {
+                "recent_win_rate": round(win_rate, 1),
+                "overall_win_rate": round(overall_win_rate, 1),
+                "recent_matches": 30,
+                "total_matches": len(df)
+            },
+            "forecast_summary": forecast_summary,
+            "data_summary": {
+                "total_observations": len(df),
+                "date_range": {
+                    "start": df.index.min().strftime('%Y-%m-%d'),
+                    "end": df.index.max().strftime('%Y-%m-%d')
+                },
+                "metrics_available": list(df.columns)
+            }
         })
-    
-    recent_matches = []
-    for i in range(min(10, len(df))):
-        row = df.iloc[i]
-        recent_matches.append({
-            "match_date": row.get('match_date', datetime.now().strftime("%Y-%m-%d")),
-            "team_a_score": row['team_a_total_kills'],
-            "team_b_score": row['team_b_total_kills']
-        })
-    
-    # Top matches by total kills
-    df_with_total = df.copy()
-    df_with_total['total_kills'] = df['team_a_total_kills'] + df['team_b_total_kills']
-    top_matches = df_with_total.nlargest(5, 'total_kills')[['match_date', 'team_a_total_kills', 'team_b_total_kills']].to_dict('records')
-    
-    return jsonify({
-        "efficiency_trend": efficiency_trend,
-        "recent_matches": recent_matches,
-        "top_matches": top_matches
-    })
+        
+    except Exception as e:
+        return jsonify({"error": f"Dashboard data generation failed: {str(e)}"}), 500
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    """Predict match winner using ML model"""
-    if model is None:
-        return jsonify({"error": "ML model not available. Please try again."}), 500
-    
+    """Predict future performance using ARIMA models"""
     try:
         data = request.get_json()
+        metric = data.get('metric', 'team_a_kills')
+        days_ahead = data.get('days_ahead', 7)
         
-        # Map frontend field names to model field names
-        features = [
-            data.get('team_a_kills', 0),  # team_a_total_kills
-            data.get('team_a_digs', 0),   # team_a_total_digs
-            data.get('team_a_errors', 0), # team_a_total_errors
-            data.get('team_a_aces', 0),   # team_a_total_aces
-            data.get('team_b_kills', 0),  # team_b_total_kills
-            data.get('team_b_digs', 0),   # team_b_total_digs
-            data.get('team_b_errors', 0), # team_b_total_errors
-            data.get('team_b_aces', 0),   # team_b_total_aces
-            # Calculate kill efficiency (kills / (kills + errors))
-            data.get('team_a_kills', 0) / max((data.get('team_a_kills', 0) + data.get('team_a_errors', 0)), 1),
-            data.get('team_b_kills', 0) / max((data.get('team_b_kills', 0) + data.get('team_b_errors', 0)), 1)
-        ]
+        if metric not in arima_models:
+            return jsonify({"error": f"ARIMA model not available for {metric}"}), 500
         
-        # Make ML prediction
-        prediction = model.predict([features])[0]
-        probabilities = model.predict_proba([features])[0]
+        # Generate forecast
+        forecast = generate_forecast(arima_models[metric], steps=days_ahead)
         
-        # Determine confidence
-        confidence = max(probabilities)
+        if not forecast:
+            return jsonify({"error": "Forecast generation failed"}), 500
+        
+        # Get current value
+        current_value = df[metric].iloc[-1]
+        
+        # Calculate predictions
+        predictions = []
+        for i, (date, pred_value) in enumerate(zip(forecast['dates'], forecast['forecast'])):
+            change = ((pred_value - current_value) / current_value) * 100
+            predictions.append({
+                "date": date,
+                "predicted_value": round(pred_value, 2),
+                "confidence_lower": round(forecast['lower_ci'][i], 2),
+                "confidence_upper": round(forecast['upper_ci'][i], 2),
+                "percent_change": round(change, 2)
+            })
         
         return jsonify({
-            "prediction": "Team A" if prediction == 1 else "Team B",
-            "confidence": round(confidence, 3),
-            "probabilities": {
-                "Team A": round(probabilities[0], 3),
-                "Team B": round(probabilities[1], 3)
-            },
-            "ml_model": "Random Forest Classifier",
-            "features_used": {
-                "team_a_kills": features[0],
-                "team_a_digs": features[1],
-                "team_a_errors": features[2],
-                "team_a_aces": features[3],
-                "team_b_kills": features[4],
-                "team_b_digs": features[5],
-                "team_b_errors": features[6],
-                "team_b_aces": features[7],
-                "team_a_kill_efficiency": round(features[8], 3),
-                "team_b_kill_efficiency": round(features[9], 3)
+            "metric": metric,
+            "current_value": round(current_value, 2),
+            "predictions": predictions,
+            "model_info": {
+                "type": "ARIMA",
+                "order": str(arima_models[metric].model.order),
+                "aic": round(arima_models[metric].aic, 2)
             }
         })
         
     except Exception as e:
-        print(f"ML Prediction error: {str(e)}")
-        return jsonify({"error": f"ML prediction failed: {str(e)}"}), 500
-
-@app.route('/sample-prediction')
-def sample_prediction():
-    """Get a sample ML prediction"""
-    if model is None:
-        return jsonify({"error": "ML model not available"}), 500
-    
-    try:
-        # Sample features
-        sample_features = [25, 20, 8, 3, 22, 18, 10, 2, 0.76, 0.69]
-        
-        # Make ML prediction
-        prediction = model.predict([sample_features])[0]
-        probabilities = model.predict_proba([sample_features])[0]
-        confidence = max(probabilities)
-        
-        return jsonify({
-            "prediction": "Team A" if prediction == 1 else "Team B",
-            "confidence": round(confidence, 3),
-            "probabilities": {
-                "Team A": round(probabilities[0], 3),
-                "Team B": round(probabilities[1], 3)
-            },
-            "ml_model": "Random Forest Classifier",
-            "sample_data": {
-                "team_a_kills": 25,
-                "team_a_digs": 20,
-                "team_a_errors": 8,
-                "team_a_aces": 3,
-                "team_b_kills": 22,
-                "team_b_digs": 18,
-                "team_b_errors": 10,
-                "team_b_aces": 2
-            }
-        })
-    except Exception as e:
-        return jsonify({"error": f"Sample ML prediction failed: {str(e)}"}), 500
+        return jsonify({"error": f"ARIMA prediction failed: {str(e)}"}), 500
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 5000))) 

@@ -1,58 +1,58 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, PieChart, Pie, Cell, AreaChart, Area, ResponsiveContainer } from 'recharts';
-import { BACKEND_URL } from '../config';
+import { API_BASE_URL } from '../config';
 
-function Dashboard() {
-  const [stats, setStats] = useState(null);
+const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedMetric, setSelectedMetric] = useState('team_a_kills');
+  const [visualization, setVisualization] = useState(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        
-        // Fetch basic stats
-        const statsResponse = await axios.get(`${BACKEND_URL}/stats`);
-        setStats(statsResponse.data);
-        
-        // Fetch dashboard data for charts
-        const dashboardResponse = await axios.get(`${BACKEND_URL}/dashboard`);
-        setDashboardData(dashboardResponse.data);
-        
-      } catch (err) {
-        console.error('Error fetching dashboard data:', err);
-        if (err.response?.status === 404) {
-          setError('Backend service not available. Please ensure the Railway backend is deployed and running.');
-        } else if (err.code === 'NETWORK_ERROR' || err.message?.includes('Network Error')) {
-          setError('Unable to connect to the backend service. Please check your internet connection and ensure the backend URL is correct in config.js');
-        } else if (err.message?.includes('your-railway-app-name')) {
-          setError('Backend URL not configured. Please update the BACKEND_URL in frontend/src/config.js with your actual Railway URL.');
-        } else {
-          setError('Failed to load dashboard data. Please try again.');
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
+    fetchDashboardData();
   }, []);
+
+  useEffect(() => {
+    if (selectedMetric) {
+      fetchVisualization(selectedMetric);
+    }
+  }, [selectedMetric]);
+
+  const fetchDashboardData = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`${API_BASE_URL}/dashboard`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch dashboard data');
+      }
+      const data = await response.json();
+      setDashboardData(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchVisualization = async (metric) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/visualization/${metric}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch visualization');
+      }
+      const data = await response.json();
+      setVisualization(data.visualization);
+    } catch (err) {
+      console.error('Visualization error:', err);
+    }
+  };
 
   if (loading) {
     return (
-      <div className="presentation-slide">
-        <h2>Live Analytics Dashboard</h2>
-        <div style={{ 
-          padding: '20px', 
-          background: '#f8f9fa', 
-          borderRadius: '8px', 
-          textAlign: 'center',
-          border: '1px solid #dee2e6'
-        }}>
-          <p style={{ color: '#666', margin: 0 }}>Loading comprehensive volleyball statistics...</p>
+      <div className="dashboard-container">
+        <div className="loading-spinner">
+          <div className="spinner"></div>
+          <p>Loading ARIMA Analytics Dashboard...</p>
         </div>
       </div>
     );
@@ -60,279 +60,163 @@ function Dashboard() {
 
   if (error) {
     return (
-      <div className="presentation-slide">
-        <h2>Live Analytics Dashboard</h2>
-        <div style={{ 
-          padding: '15px', 
-          background: '#fee', 
-          border: '1px solid #fcc', 
-          borderRadius: '8px', 
-          color: '#c33'
-        }}>
-          <strong>Error:</strong> {error}
+      <div className="dashboard-container">
+        <div className="error-message">
+          <h3>Error Loading Dashboard</h3>
+          <p>{error}</p>
+          <button onClick={fetchDashboardData} className="retry-button">
+            Retry
+          </button>
         </div>
       </div>
     );
   }
 
+  if (!dashboardData) {
+    return (
+      <div className="dashboard-container">
+        <p>No dashboard data available</p>
+      </div>
+    );
+  }
+
+  const { recent_trends, win_analysis, forecast_summary, data_summary } = dashboardData;
+
   return (
-    <div className="presentation-slide">
-      <h2>Live Analytics Dashboard</h2>
-      <p style={{ marginBottom: '20px', color: '#666', textAlign: 'center' }}>
-        Real-time analysis of AVP beach volleyball match data, showcasing key performance metrics and trends.
-        This dashboard demonstrates how we can extract meaningful insights from sports statistics to understand 
-        team performance, competitive dynamics, and strategic patterns.
-      </p>
-      
-      {/* Basic Statistics Cards */}
-      {stats && (
-        <div className="stats-grid">
-          <div className="stat-card">
-            <h3>Total Matches Analyzed</h3>
-            <div className="value">{stats.total_matches}</div>
-            <p>Professional matches in dataset</p>
-          </div>
-          <div className="stat-card">
-            <h3>Team A Win Rate</h3>
-            <div className="value">{stats.team_a_wins}</div>
-            <p>({stats.win_percentage.team_a}% success rate)</p>
-          </div>
-          <div className="stat-card">
-            <h3>Team B Win Rate</h3>
-            <div className="value">{stats.team_b_wins}</div>
-            <p>({stats.win_percentage.team_b}% success rate)</p>
-          </div>
-          <div className="stat-card">
-            <h3>Avg Team A Kills</h3>
-            <div className="value">{stats.average_stats.team_a_kills}</div>
-            <p>Per match average</p>
-          </div>
-          <div className="stat-card">
-            <h3>Avg Team B Kills</h3>
-            <div className="value">{stats.average_stats.team_b_kills}</div>
-            <p>Per match average</p>
-          </div>
-          <div className="stat-card">
-            <h3>Avg Team A Digs</h3>
-            <div className="value">{stats.average_stats.team_a_digs}</div>
-            <p>Defensive plays per match</p>
+    <div className="dashboard-container">
+      <div className="dashboard-header">
+        <h2>ARIMA Time Series Analytics Dashboard</h2>
+        <p>Real-time volleyball performance forecasting and trend analysis</p>
+      </div>
+
+      <div className="dashboard-grid">
+        {/* Performance Trends */}
+        <div className="dashboard-card">
+          <h3>Recent Performance Trends (30 Days)</h3>
+          <div className="trends-grid">
+            {Object.entries(recent_trends).map(([metric, trend]) => (
+              <div key={metric} className="trend-item">
+                <h4>{metric.replace('_', ' ').toUpperCase()}</h4>
+                <div className="trend-stats">
+                  <div className="trend-value">
+                    <span className="current">{trend.current_value}</span>
+                    <span className="average">Avg: {trend.average_value}</span>
+                  </div>
+                  <div className={`trend-direction ${trend.trend}`}>
+                    {trend.trend === 'increasing' ? '↗' : trend.trend === 'decreasing' ? '↘' : '→'}
+                    {trend.trend}
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-      )}
 
-      {/* Charts Section */}
-      {dashboardData && (
-        <div style={{ marginTop: '30px' }}>
-          <h3>Performance Analytics & Trends</h3>
-          <p style={{ marginBottom: '20px', color: '#666' }}>
-            Interactive visualizations showing performance patterns and statistical insights from professional beach volleyball matches.
-            These charts reveal the underlying dynamics that drive success in competitive beach volleyball.
-          </p>
-          
-          {/* Win/Loss Distribution Pie Chart */}
-          {stats && (
-            <div style={{ marginBottom: '30px' }}>
-              <h4>Match Outcome Distribution</h4>
-              <p style={{ color: '#666', marginBottom: '10px' }}>
-                Overall win distribution across all analyzed matches, providing insights into competitive balance.
-                This visualization helps us understand if the sport shows fair competition or if certain teams dominate.
-                A balanced distribution indicates a healthy competitive environment where skill and strategy determine outcomes.
-              </p>
-              <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <ResponsiveContainer width="100%" height={300}>
-                  <PieChart>
-                    <Pie
-                      data={[
-                        { name: 'Team A Wins', value: stats.team_a_wins, fill: '#0088FE' },
-                        { name: 'Team B Wins', value: stats.team_b_wins, fill: '#00C49F' }
-                      ]}
-                      cx="50%"
-                      cy="50%"
-                      labelLine={false}
-                      label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                      outerRadius={80}
-                      dataKey="value"
-                    >
-                      <Cell fill="#0088FE" />
-                      <Cell fill="#00C49F" />
-                    </Pie>
-                    <Tooltip />
-                  </PieChart>
-                </ResponsiveContainer>
+        {/* Win Analysis */}
+        <div className="dashboard-card">
+          <h3>Win Rate Analysis</h3>
+          <div className="win-analysis">
+            <div className="win-stat">
+              <h4>Recent Win Rate</h4>
+              <div className="win-percentage">
+                <span className="percentage">{win_analysis.recent_win_rate}%</span>
+                <span className="matches">({win_analysis.recent_matches} matches)</span>
               </div>
             </div>
-          )}
-
-          {/* Kill Efficiency Trend */}
-          {dashboardData.efficiency_trend && dashboardData.efficiency_trend.length > 0 && (
-            <div style={{ marginBottom: '30px' }}>
-              <h4>Kill Efficiency Progression</h4>
-              <p style={{ color: '#666', marginBottom: '10px' }}>
-                Tracking kill efficiency over time to identify performance trends and improvement patterns.
-                This chart shows how teams' offensive effectiveness changes throughout the season, revealing 
-                which teams are improving their attacking skills and which may be struggling with consistency.
-                Kill efficiency is a critical metric in beach volleyball as it directly correlates with scoring success.
-              </p>
-              <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <ResponsiveContainer width="100%" height={300}>
-                  <AreaChart data={dashboardData.efficiency_trend}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="match_number" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Area type="monotone" dataKey="team_a_kill_efficiency" stroke="#0088FE" fill="#0088FE" fillOpacity={0.3} name="Team A Efficiency" />
-                    <Area type="monotone" dataKey="team_b_kill_efficiency" stroke="#00C49F" fill="#00C49F" fillOpacity={0.3} name="Team B Efficiency" />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-          )}
-
-          {/* Recent Matches Bar Chart */}
-          {dashboardData.recent_matches && dashboardData.recent_matches.length > 0 && (
-            <div style={{ marginBottom: '30px' }}>
-              <h4>Recent Match Scoring Analysis</h4>
-              <p style={{ color: '#666', marginBottom: '10px' }}>
-                Score comparison across recent matches, highlighting offensive performance and scoring patterns.
-                This visualization helps identify which teams are currently performing better and reveals 
-                scoring trends that can inform strategic decisions. In beach volleyball, consistent scoring 
-                often indicates strong sideout efficiency and effective offensive execution.
-              </p>
-              <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={dashboardData.recent_matches}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="match_date" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Bar dataKey="team_a_score" fill="#0088FE" name="Team A Score" />
-                    <Bar dataKey="team_b_score" fill="#00C49F" name="Team B Score" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-          )}
-
-          {/* Performance Comparison */}
-          {stats && (
-            <div style={{ marginBottom: '30px' }}>
-              <h4>Team Performance Comparison</h4>
-              <p style={{ color: '#666', marginBottom: '10px' }}>
-                Side-by-side comparison of key performance metrics between teams, showing strengths and weaknesses.
-                This analysis reveals which teams excel in different aspects of the game - whether it's 
-                offensive firepower, defensive consistency, or minimizing unforced errors. Understanding 
-                these performance differentials is crucial for strategic planning and player development.
-              </p>
-              <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={[
-                    {
-                      metric: 'Kills',
-                      'Team A': stats.average_stats.team_a_kills,
-                      'Team B': stats.average_stats.team_b_kills
-                    },
-                    {
-                      metric: 'Digs',
-                      'Team A': stats.average_stats.team_a_digs,
-                      'Team B': stats.average_stats.team_b_digs
-                    },
-                    {
-                      metric: 'Errors',
-                      'Team A': stats.average_stats.team_a_errors,
-                      'Team B': stats.average_stats.team_b_errors
-                    },
-                    {
-                      metric: 'Aces',
-                      'Team A': stats.average_stats.team_a_aces,
-                      'Team B': stats.average_stats.team_b_aces
-                    }
-                  ]}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="metric" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Bar dataKey="Team A" fill="#0088FE" />
-                    <Bar dataKey="Team B" fill="#00C49F" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-          )}
-
-          {/* Top Matches Table */}
-          {dashboardData.top_matches && dashboardData.top_matches.length > 0 && (
-            <div>
-              <h4>High-Performance Match Analysis</h4>
-              <p style={{ color: '#666', marginBottom: '10px' }}>
-                Matches with the highest combined kill counts, representing peak offensive performance.
-                These matches showcase the highest level of competitive play and offensive skill, 
-                demonstrating what's possible when teams are firing on all cylinders. High-scoring 
-                matches often indicate excellent sideout efficiency and strong offensive execution.
-              </p>
-              <div style={{ overflowX: 'auto' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '10px' }}>
-                  <thead>
-                    <tr style={{ backgroundColor: '#f8f9fa' }}>
-                      <th style={{ padding: '10px', border: '1px solid #ddd', textAlign: 'left' }}>Match Date</th>
-                      <th style={{ padding: '10px', border: '1px solid #ddd', textAlign: 'center' }}>Team A Kills</th>
-                      <th style={{ padding: '10px', border: '1px solid #ddd', textAlign: 'center' }}>Team B Kills</th>
-                      <th style={{ padding: '10px', border: '1px solid #ddd', textAlign: 'center' }}>Total Kills</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {dashboardData.top_matches.map((match, index) => (
-                      <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#fff' : '#f8f9fa' }}>
-                        <td style={{ padding: '10px', border: '1px solid #ddd' }}>
-                          {new Date(match.match_date).toLocaleDateString()}
-                        </td>
-                        <td style={{ padding: '10px', border: '1px solid #ddd', textAlign: 'center' }}>
-                          {match.team_a_total_kills}
-                        </td>
-                        <td style={{ padding: '10px', border: '1px solid #ddd', textAlign: 'center' }}>
-                          {match.team_b_total_kills}
-                        </td>
-                        <td style={{ padding: '10px', border: '1px solid #ddd', textAlign: 'center', fontWeight: 'bold' }}>
-                          {match.team_a_total_kills + match.team_b_total_kills}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
-
-          {/* Data Insights Summary */}
-          <div style={{ 
-            marginTop: '40px', 
-            padding: '20px', 
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', 
-            borderRadius: '15px',
-            color: 'white'
-          }}>
-            <h4 style={{ marginBottom: '15px' }}>Key Insights from the Data</h4>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '15px' }}>
-              <div>
-                <strong>Competitive Balance:</strong> The win distribution shows a healthy competitive environment where skill determines outcomes.
-              </div>
-              <div>
-                <strong>Performance Trends:</strong> Kill efficiency varies significantly, indicating skill differences and training opportunities.
-              </div>
-              <div>
-                <strong>Scoring Patterns:</strong> Recent matches show consistent scoring ranges, suggesting predictable competitive dynamics.
-              </div>
-              <div>
-                <strong>Data Quality:</strong> Comprehensive statistics enable detailed analysis of beach volleyball performance factors.
+            <div className="win-stat">
+              <h4>Overall Win Rate</h4>
+              <div className="win-percentage">
+                <span className="percentage">{win_analysis.overall_win_rate}%</span>
+                <span className="matches">({win_analysis.total_matches} total)</span>
               </div>
             </div>
           </div>
         </div>
-      )}
+
+        {/* Forecast Summary */}
+        <div className="dashboard-card">
+          <h3>ARIMA Forecast Summary (30 Days)</h3>
+          <div className="forecast-grid">
+            {Object.entries(forecast_summary).map(([metric, forecast]) => (
+              <div key={metric} className="forecast-item">
+                <h4>{metric.replace('_', ' ').toUpperCase()}</h4>
+                <div className="forecast-stats">
+                  <div className="forecast-values">
+                    <span className="current">Current: {forecast.current_value}</span>
+                    <span className="forecasted">Forecast: {forecast.forecasted_value}</span>
+                  </div>
+                  <div className={`forecast-change ${forecast.trend}`}>
+                    {forecast.percent_change > 0 ? '+' : ''}{forecast.percent_change}%
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Interactive Visualization */}
+        <div className="dashboard-card full-width">
+          <h3>Interactive Time Series Analysis</h3>
+          <div className="visualization-controls">
+            <label htmlFor="metric-select">Select Metric:</label>
+            <select 
+              id="metric-select"
+              value={selectedMetric} 
+              onChange={(e) => setSelectedMetric(e.target.value)}
+            >
+              <option value="team_a_kills">Team A Kills</option>
+              <option value="team_b_kills">Team B Kills</option>
+              <option value="team_a_efficiency">Team A Efficiency</option>
+              <option value="team_b_efficiency">Team B Efficiency</option>
+              <option value="total_kills">Total Kills</option>
+              <option value="kill_difference">Kill Difference</option>
+            </select>
+          </div>
+          <div className="visualization-container">
+            {visualization ? (
+              <div 
+                className="plotly-chart"
+                dangerouslySetInnerHTML={{
+                  __html: `
+                    <script>
+                      var chartData = ${visualization};
+                      Plotly.newPlot('chart-container', chartData.data, chartData.layout);
+                    </script>
+                  `
+                }}
+              />
+            ) : (
+              <div className="loading-chart">
+                <p>Loading visualization...</p>
+              </div>
+            )}
+            <div id="chart-container" style={{ width: '100%', height: '400px' }}></div>
+          </div>
+        </div>
+
+        {/* Data Summary */}
+        <div className="dashboard-card">
+          <h3>Data Summary</h3>
+          <div className="data-summary">
+            <div className="summary-item">
+              <span className="label">Total Observations:</span>
+              <span className="value">{data_summary.total_observations}</span>
+            </div>
+            <div className="summary-item">
+              <span className="label">Date Range:</span>
+              <span className="value">
+                {data_summary.date_range.start} to {data_summary.date_range.end}
+              </span>
+            </div>
+            <div className="summary-item">
+              <span className="label">Metrics Available:</span>
+              <span className="value">{data_summary.metrics_available.length}</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
-}
+};
 
 export default Dashboard; 

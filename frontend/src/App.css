@@ -690,4 +690,613 @@ body {
   background-color: #fff3cd;
   color: #856404;
   border: 1px solid #ffeaa7;
+}
+
+/* ARIMA Dashboard Styles */
+.dashboard-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dashboard-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.dashboard-header h2 {
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.dashboard-header p {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.dashboard-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e1e8ed;
+}
+
+.dashboard-card.full-width {
+  grid-column: 1 / -1;
+}
+
+.dashboard-card h3 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+}
+
+/* Trends Grid */
+.trends-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.trend-item {
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #3498db;
+}
+
+.trend-item h4 {
+  color: #2c3e50;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.trend-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.trend-value .current {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #2c3e50;
+  display: block;
+}
+
+.trend-value .average {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.trend-direction {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.trend-direction.increasing {
+  background: #d4edda;
+  color: #155724;
+}
+
+.trend-direction.decreasing {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.trend-direction.stable {
+  background: #fff3cd;
+  color: #856404;
+}
+
+/* Win Analysis */
+.win-analysis {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.win-stat {
+  text-align: center;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.win-stat h4 {
+  color: #2c3e50;
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.win-percentage .percentage {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #3498db;
+  display: block;
+}
+
+.win-percentage .matches {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+/* Forecast Grid */
+.forecast-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+}
+
+.forecast-item {
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #e74c3c;
+}
+
+.forecast-item h4 {
+  color: #2c3e50;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.forecast-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.forecast-values {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.forecast-values .current,
+.forecast-values .forecasted {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.forecast-change {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.forecast-change.increasing {
+  background: #d4edda;
+  color: #155724;
+}
+
+.forecast-change.decreasing {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.forecast-change.stable {
+  background: #fff3cd;
+  color: #856404;
+}
+
+/* Visualization Controls */
+.visualization-controls {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.visualization-controls label {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.visualization-controls select {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: white;
+  font-size: 0.9rem;
+}
+
+.visualization-container {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  min-height: 400px;
+}
+
+.loading-chart {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400px;
+  color: #666;
+}
+
+/* Data Summary */
+.data-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 6px;
+}
+
+.summary-item .label {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.summary-item .value {
+  color: #3498db;
+  font-weight: bold;
+}
+
+/* Loading and Error States */
+.loading-spinner {
+  text-align: center;
+  padding: 40px;
+}
+
+.spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error-message {
+  text-align: center;
+  padding: 40px;
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 8px;
+  color: #721c24;
+}
+
+.retry-button {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+.retry-button:hover {
+  background: #c82333;
+}
+
+/* ARIMA Prediction Form Styles */
+.predict-form-container {
+  padding: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.form-header h2 {
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.form-header p {
+  color: #666;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.form-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.prediction-form {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e1e8ed;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 8px;
+}
+
+.form-group select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  background: white;
+}
+
+.metric-description,
+.forecast-description {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 5px;
+  font-style: italic;
+}
+
+.predict-button {
+  width: 100%;
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 15px;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.predict-button:hover:not(:disabled) {
+  background: #2980b9;
+}
+
+.predict-button:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
+}
+
+/* Prediction Results */
+.prediction-results {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e1e8ed;
+}
+
+.prediction-results h3 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.model-info {
+  margin-bottom: 25px;
+}
+
+.model-info h4 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 6px;
+}
+
+.info-item .label {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.info-item .value {
+  color: #3498db;
+  font-weight: bold;
+}
+
+/* Forecast Table */
+.forecast-table {
+  margin-bottom: 25px;
+}
+
+.forecast-table h4 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.forecast-table table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.forecast-table th {
+  background: #3498db;
+  color: white;
+  padding: 12px;
+  text-align: left;
+  font-weight: bold;
+}
+
+.forecast-table td {
+  padding: 12px;
+  border-bottom: 1px solid #e1e8ed;
+}
+
+.forecast-table tr:hover {
+  background: #f8f9fa;
+}
+
+.forecast-table .positive {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.forecast-table .negative {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+.forecast-table .neutral {
+  color: #6c757d;
+  font-weight: bold;
+}
+
+/* Forecast Insights */
+.forecast-insights h4 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+
+.insights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+}
+
+.insight-card {
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #3498db;
+}
+
+.insight-card h5 {
+  color: #2c3e50;
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.insight-card p {
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ARIMA Explanation */
+.arima-explanation {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e1e8ed;
+  margin-top: 30px;
+}
+
+.arima-explanation h3 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.explanation-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.explanation-section h4 {
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.explanation-section p {
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+.explanation-section ul {
+  color: #666;
+  line-height: 1.6;
+  padding-left: 20px;
+}
+
+.explanation-section li {
+  margin-bottom: 5px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .form-content {
+    grid-template-columns: 1fr;
+  }
+  
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .trends-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .win-analysis {
+    grid-template-columns: 1fr;
+  }
+  
+  .forecast-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .insights-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .explanation-content {
+    grid-template-columns: 1fr;
+  }
 } 
